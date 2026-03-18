@@ -1,0 +1,153 @@
+# Copyright (C) 2024 Umang Prajapati (https://phptutorialpoints.in/)
+# This file is distributed under the same license as the Secure Media Vault plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Secure Media Vault 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/umang48/secure-media-vault/issues\n"
+"POT-Creation-Date: 2024-01-01T00:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: secure-media-vault\n"
+
+#. Plugin Name of the plugin
+msgid "Secure Media Vault"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://wordpress.org/plugins/secure-media-vault/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Protect WordPress media files from direct public access with token-based secure delivery, fine-grained access control, and SEO indexing protection."
+msgstr ""
+
+#. Author of the plugin
+msgid "Secure Media Vault Contributors"
+msgstr ""
+
+#: includes/class-smv-activator.php
+msgid ""
+msgstr ""
+
+#: includes/class-smv-file-handler.php:66
+msgid "Invalid or expired access token."
+msgstr ""
+
+#: includes/class-smv-file-handler.php:79
+msgid "You do not have permission to access this file."
+msgstr ""
+
+#: includes/class-smv-file-handler.php:88
+msgid "Hotlinking is not allowed."
+msgstr ""
+
+#: includes/class-smv-file-handler.php:96
+msgid "File not found."
+msgstr ""
+
+#: includes/class-smv-file-handler.php:164
+msgid "Unable to read file."
+msgstr ""
+
+#: includes/class-smv-file-handler.php:197
+msgid "Protected File \xe2\x80\x93 Enter Password"
+msgstr ""
+
+#: includes/class-smv-file-handler.php:200
+msgid "This file is password protected"
+msgstr ""
+
+#: includes/class-smv-file-handler.php:203
+msgid "Enter password to access this file:"
+msgstr ""
+
+#: includes/class-smv-file-handler.php:204
+msgid "Access File"
+msgstr ""
+
+#: admin/class-smv-admin.php:52
+msgid "Secure Media Vault"
+msgstr ""
+
+#: admin/class-smv-admin.php:53
+msgid "Media Vault"
+msgstr ""
+
+#: admin/class-smv-admin.php:59
+#: admin/class-smv-admin.php:65
+msgid "Dashboard"
+msgstr ""
+
+#: admin/class-smv-admin.php:73
+#: admin/class-smv-admin.php:79
+msgid "Settings"
+msgstr ""
+
+#: admin/class-smv-admin.php:87
+#: admin/class-smv-admin.php:93
+msgid "Access Logs"
+msgstr ""
+
+#: admin/class-smv-admin.php:139
+msgid "Secure Media Vault: Permalink settings may need to be re-saved. %1$sGo to Permalinks Settings%2$s."
+msgstr ""
+
+#: admin/class-smv-admin.php:217
+msgid "Permission denied."
+msgstr ""
+
+#: admin/class-smv-admin.php:222
+#: admin/class-smv-admin.php:246
+msgid "Invalid attachment ID."
+msgstr ""
+
+#: admin/class-smv-admin.php:251
+msgid "%d token(s) revoked successfully."
+msgstr ""
+
+#: admin/class-smv-media-library.php:166
+msgid "SMV: Protect (Logged-in Only)"
+msgstr ""
+
+#: admin/class-smv-media-library.php:167
+msgid "SMV: Protect (Admins Only)"
+msgstr ""
+
+#: admin/class-smv-media-library.php:168
+msgid "SMV: Make Public"
+msgstr ""
+
+#: admin/class-smv-media-library.php:211
+msgid "Secure Media Vault: %d file(s) protection settings updated."
+msgstr ""
+
+#: admin/class-smv-media-library.php:220
+msgid "Protection"
+msgstr ""
+
+#: admin/class-smv-media-library.php:234
+msgid "Public"
+msgstr ""
+
+#: admin/class-smv-media-library.php:239
+msgid "Logged-in"
+msgstr ""
+
+#: admin/class-smv-media-library.php:244
+msgid "By Role"
+msgstr ""
+
+#: admin/class-smv-media-library.php:249
+msgid "Password"
+msgstr ""
+
+#: admin/class-smv-media-library.php:254
+msgid "By Post"
+msgstr ""
