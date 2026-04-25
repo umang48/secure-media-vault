@@ -105,9 +105,8 @@ class SMV_Media_Library {
 			return $post;
 		}
 
-		if ( ! check_admin_referer( 'media-form' ) ) {
-			return $post;
-		}
+		// WordPress core already handles nonce validation before applying this filter.
+		// (It uses update-post_{$post_id} for AJAX, and update-post_{$post_id} or media-form for classic edits).
 
 		if ( ! current_user_can( 'upload_files' ) ) {
 			return $post;

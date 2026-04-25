@@ -47,13 +47,18 @@ class SMV_Htaccess_Manager {
 			? file_get_contents( $htaccess ) // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			: '';
 
+		// Strip UTF-8 BOM if present (can appear in files edited on Windows).
+		$content = str_replace( "\xEF\xBB\xBF", '', $content );
+
 		// Remove existing SMV block.
 		$content = self::remove_existing_block( $content );
 
 		if ( $protect ) {
-			$rules    = self::build_rules();
-			$content  = self::MARKER_BEGIN . "\n" . $rules . self::MARKER_END . "\n" . $content;
+			$rules   = self::build_rules();
+			$content = self::MARKER_BEGIN . "\n" . $rules . self::MARKER_END . "\n" . ltrim( $content );
 		}
+
+		$content = rtrim( $content ) . "\n";
 
 		return (bool) file_put_contents( $htaccess, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 	}
@@ -73,14 +78,10 @@ class SMV_Htaccess_Manager {
 	 * @return string
 	 */
 	private static function build_rules() {
-		$home_path = rtrim( wp_parse_url( home_url(), PHP_URL_PATH ), '/' );
-
 		$rules  = "<IfModule mod_rewrite.c>\n";
 		$rules .= "RewriteEngine On\n";
-		$rules .= "RewriteBase {$home_path}/\n";
-		// Block direct file access; route through the secure handler.
-		$rules .= "RewriteCond %{REQUEST_FILENAME} -f\n";
-		$rules .= "RewriteRule ^(.*)$ " . home_url( '/index.php' ) . " [L]\n";
+		// Prevent infinite loops: if the request is already going to index.php, stop.
+		$rules .= "RewriteRule ^index\\.php$ - [L]\n";
 		$rules .= "</IfModule>\n";
 		// Disable directory listings.
 		$rules .= "Options -Indexes\n";

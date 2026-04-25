@@ -117,17 +117,24 @@ class SMV_Token_Manager {
 		$token         = sanitize_text_field( $token );
 		$attachment_id = absint( $attachment_id );
 
-		$table = $wpdb->prefix . 'smv_tokens';
+		$table     = esc_sql( $wpdb->prefix . 'smv_tokens' );
+		$cache_key = 'smv_token_' . $token . '_' . $attachment_id;
+		$cached    = wp_cache_get( $cache_key, 'smv' );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$row = $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM {$table} WHERE token = %s AND attachment_id = %d AND expires_at > %s LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQuery
-				$token,
-				$attachment_id,
-				current_time( 'mysql', true )
-			)
-		);
+		if ( false !== $cached ) {
+			$row = $cached;
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$row = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT * FROM `{$table}` WHERE token = %s AND attachment_id = %d AND expires_at > %s LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					$token,
+					$attachment_id,
+					current_time( 'mysql', true )
+				)
+			);
+			wp_cache_set( $cache_key, $row, 'smv', 60 );
+		}
 
 		if ( ! $row ) {
 			return false;
@@ -154,11 +161,15 @@ class SMV_Token_Manager {
 
 		$table = $wpdb->prefix . 'smv_tokens';
 
-		$deleted = $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$deleted = $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
 			array( 'token' => sanitize_text_field( $token ) ),
 			array( '%s' )
 		);
+
+		if ( $deleted ) {
+			wp_cache_delete( 'smv_token_' . sanitize_text_field( $token ), 'smv' );
+		}
 
 		return (bool) $deleted;
 	}
@@ -174,11 +185,17 @@ class SMV_Token_Manager {
 
 		$table = $wpdb->prefix . 'smv_tokens';
 
-		return (int) $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$count = (int) $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
 			array( 'attachment_id' => absint( $attachment_id ) ),
 			array( '%d' )
 		);
+
+		if ( $count ) {
+			wp_cache_delete( 'smv_protection_' . absint( $attachment_id ), 'smv' );
+		}
+
+		return $count;
 	}
 
 	/**
@@ -203,13 +220,14 @@ class SMV_Token_Manager {
 	public function cleanup_expired_tokens() {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'smv_tokens';
-		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$table = esc_sql( $wpdb->prefix . 'smv_tokens' );
+		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
-				"DELETE FROM {$table} WHERE expires_at < %s",
+				"DELETE FROM `{$table}` WHERE expires_at < %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				current_time( 'mysql', true )
 			)
 		);
+		wp_cache_flush_group( 'smv' );
 	}
 
 	/**

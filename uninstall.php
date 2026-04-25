@@ -38,13 +38,14 @@ foreach ( $smv_options as $option ) {
 
 // Drop custom tables.
 $tables = array(
-	$wpdb->prefix . 'smv_protection',
-	$wpdb->prefix . 'smv_tokens',
-	$wpdb->prefix . 'smv_access_logs',
+	esc_sql( $wpdb->prefix . 'smv_protection' ),
+	esc_sql( $wpdb->prefix . 'smv_tokens' ),
+	esc_sql( $wpdb->prefix . 'smv_access_logs' ),
 );
 
 foreach ( $tables as $table ) {
-	$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
 }
 
 // Remove uploads .htaccess rules.

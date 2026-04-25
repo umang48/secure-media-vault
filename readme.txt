@@ -3,19 +3,19 @@ Contributors: umangapps48
 Donate link: https://phptutorialpoints.in/
 Tags: media protection, secure files, file access control, media library, token url
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Protect WordPress media files from direct public access with token-based secure delivery, fine-grained access control, and SEO indexing protection.
-
-**Author:** [Umang Prajapati](https://phptutorialpoints.in/) | [WordPress Profile](https://profiles.wordpress.org/umangapps48/) | [GitHub](https://github.com/umang48/secure-media-vault)
+Protect WordPress media files with token-based secure delivery, fine-grained access control, and SEO indexing protection.
 
 == Description ==
 
 **Secure Media Vault** gives you full control over who can access your WordPress media files. Stop search engines, bots, and unauthorised visitors from downloading your protected images, PDFs, videos, or documents.
+
+**Author:** [Umang Prajapati](https://phptutorialpoints.in/) | [WordPress Profile](https://profiles.wordpress.org/umangapps48/) | [GitHub](https://github.com/umang48/secure-media-vault)
 
 = Core Features =
 

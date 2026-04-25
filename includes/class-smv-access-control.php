@@ -81,7 +81,7 @@ class SMV_Access_Control {
 			? wp_json_encode( array_map( 'absint', $settings['allowed_post_ids'] ) )
 			: null;
 
-		$table = $wpdb->prefix . 'smv_protection';
+		$table = esc_sql( $wpdb->prefix . 'smv_protection' );
 		$data  = array(
 			'attachment_id'   => $attachment_id,
 			'protection_type' => $protection_type,
@@ -95,7 +95,7 @@ class SMV_Access_Control {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$existing = $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT id FROM {$table} WHERE attachment_id = %d LIMIT 1",
+				"SELECT id FROM `{$table}` WHERE attachment_id = %d LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$attachment_id
 			)
 		);
@@ -137,12 +137,12 @@ class SMV_Access_Control {
 		}
 
 		global $wpdb;
-		$table = $wpdb->prefix . 'smv_protection';
+		$table = esc_sql( $wpdb->prefix . 'smv_protection' );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$row = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$table} WHERE attachment_id = %d LIMIT 1",
+				"SELECT * FROM `{$table}` WHERE attachment_id = %d LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 				$attachment_id
 			),
 			ARRAY_A

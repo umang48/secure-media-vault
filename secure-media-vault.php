@@ -26,8 +26,29 @@ define( 'SMV_VERSION', '1.0.0' );
 define( 'SMV_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SMV_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'SMV_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
-define( 'SMV_UPLOADS_DIR', wp_upload_dir()['basedir'] );
-define( 'SMV_UPLOADS_URL', wp_upload_dir()['baseurl'] );
+
+/**
+ * Returns the uploads base directory.
+ *
+ * Replaces the old SMV_UPLOADS_DIR constant. Calling wp_upload_dir() at
+ * file-load time (e.g. during activation) can trigger PHP notices and produce
+ * unexpected output before headers are sent. Using a helper function means
+ * wp_upload_dir() is only called when actually needed.
+ *
+ * @return string Absolute path to the uploads base directory.
+ */
+function smv_uploads_dir() {
+	return wp_upload_dir()['basedir'];
+}
+
+/**
+ * Returns the uploads base URL.
+ *
+ * @return string URL of the uploads base directory.
+ */
+function smv_uploads_url() {
+	return wp_upload_dir()['baseurl'];
+}
 
 /**
  * Main plugin class.
@@ -84,23 +105,11 @@ final class Secure_Media_Vault {
 	 * Register all hooks.
 	 */
 	private function init_hooks() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
-		add_action( 'init', array( $this, 'init_components' ) );
+		add_action( 'plugins_loaded', array( $this, 'init_components' ) );
 
 		// Activation / deactivation hooks.
 		register_activation_hook( __FILE__, array( 'SMV_Activator', 'activate' ) );
 		register_deactivation_hook( __FILE__, array( 'SMV_Deactivator', 'deactivate' ) );
-	}
-
-	/**
-	 * Load plugin text domain.
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain(
-			'secure-media-vault',
-			false,
-			dirname( SMV_PLUGIN_BASENAME ) . '/languages'
-		);
 	}
 
 	/**

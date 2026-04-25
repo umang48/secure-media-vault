@@ -147,7 +147,7 @@ class SMV_File_Handler {
 			$this->stream_file( $file_path, $file_size );
 		} else {
 			header( 'Content-Length: ' . $file_size );
-			readfile( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_readfile
+			readfile( $file_path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
 		}
 
 		exit;
@@ -182,7 +182,7 @@ class SMV_File_Handler {
 		header( 'Content-Length: ' . $length );
 
 		$chunk_size = 1024 * 1024; // 1 MB chunks.
-		$fp         = fopen( $file_path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+		$fp         = fopen( $file_path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
 		if ( ! $fp ) {
 			wp_die( esc_html__( 'Unable to read file.', 'secure-media-vault' ), '', array( 'response' => 500 ) );
@@ -192,13 +192,13 @@ class SMV_File_Handler {
 		$bytes_remaining = $length;
 
 		while ( ! feof( $fp ) && $bytes_remaining > 0 && ! connection_aborted() ) {
-			$buffer           = fread( $fp, min( $chunk_size, $bytes_remaining ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fread
+			$buffer           = fread( $fp, min( $chunk_size, $bytes_remaining ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 			$bytes_remaining -= strlen( $buffer );
 			echo $buffer; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			flush();
 		}
 
-		fclose( $fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+		fclose( $fp ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 	}
 
 	/**

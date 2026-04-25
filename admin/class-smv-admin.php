@@ -198,15 +198,23 @@ class SMV_Admin {
 
 		global $wpdb;
 
-		$table_protection = $wpdb->prefix . 'smv_protection';
-		$table_tokens     = $wpdb->prefix . 'smv_tokens';
-		$table_logs       = $wpdb->prefix . 'smv_access_logs';
+		$table_protection = esc_sql( $wpdb->prefix . 'smv_protection' );
+		$table_tokens     = esc_sql( $wpdb->prefix . 'smv_tokens' );
+		$table_logs       = esc_sql( $wpdb->prefix . 'smv_access_logs' );
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		$total_protected = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table_protection} WHERE protection_type != 'public'" );
-		$total_tokens    = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table_tokens} WHERE expires_at > NOW()" );
-		$total_granted   = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table_logs} WHERE status = 'granted' AND accessed_at > DATE_SUB(NOW(), INTERVAL 7 DAY)" );
-		$total_denied    = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table_logs} WHERE status LIKE 'denied%' AND accessed_at > DATE_SUB(NOW(), INTERVAL 7 DAY)" );
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$total_protected = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM `{$table_protection}` WHERE protection_type != 'public'"
+		);
+		$total_tokens    = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM `{$table_tokens}` WHERE expires_at > NOW()"
+		);
+		$total_granted   = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM `{$table_logs}` WHERE status = 'granted' AND accessed_at > DATE_SUB(NOW(), INTERVAL 7 DAY)"
+		);
+		$total_denied    = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM `{$table_logs}` WHERE status LIKE 'denied%' AND accessed_at > DATE_SUB(NOW(), INTERVAL 7 DAY)"
+		);
 		// phpcs:enable
 
 		include SMV_PLUGIN_DIR . 'admin/views/dashboard.php';
@@ -223,22 +231,22 @@ class SMV_Admin {
 		}
 
 		global $wpdb;
-		$table_logs = $wpdb->prefix . 'smv_access_logs';
+		$table_logs = esc_sql( $wpdb->prefix . 'smv_access_logs' );
 		$per_page   = 20;
 		$page       = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$offset     = ( $page - 1 ) * $per_page;
 
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$logs  = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT l.*, p.post_title FROM {$table_logs} l
-				LEFT JOIN {$wpdb->posts} p ON l.attachment_id = p.ID
-				ORDER BY l.accessed_at DESC LIMIT %d OFFSET %d",
+				"SELECT l.*, p.post_title FROM `{$table_logs}` l LEFT JOIN `{$wpdb->posts}` p ON l.attachment_id = p.ID ORDER BY l.accessed_at DESC LIMIT %d OFFSET %d",
 				$per_page,
 				$offset
 			)
 		);
-		$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table_logs}" );
+		$total = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM `{$table_logs}`"
+		);
 		// phpcs:enable
 
 		include SMV_PLUGIN_DIR . 'admin/views/logs.php';

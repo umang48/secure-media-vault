@@ -28,7 +28,7 @@ class SMV_Activator {
 		self::create_tables();
 		self::set_default_options();
 		self::add_rewrite_rules();
-		self::protect_uploads_directory();
+		SMV_Htaccess_Manager::write_rules( true );
 		flush_rewrite_rules();
 	}
 
@@ -140,28 +140,4 @@ class SMV_Activator {
 		add_rewrite_tag( '%smv_token%', '([a-zA-Z0-9_-]+)' );
 	}
 
-	/**
-	 * Write .htaccess rules to block direct access to uploads directory.
-	 *
-	 * @return void
-	 */
-	private static function protect_uploads_directory() {
-		$upload_dir = wp_upload_dir();
-		$htaccess   = $upload_dir['basedir'] . '/.htaccess';
-
-		$rules = "# BEGIN Secure Media Vault\n";
-		$rules .= "<IfModule mod_rewrite.c>\n";
-		$rules .= "RewriteEngine On\n";
-		$rules .= "RewriteCond %{REQUEST_FILENAME} -f\n";
-		$rules .= "RewriteCond %{REQUEST_URI} ^/wp-content/uploads/\n";
-		$rules .= "RewriteRule ^(.*)$ " . home_url( '/protected-media-check/?smv_direct=1&file=$1' ) . " [L,R=302]\n";
-		$rules .= "</IfModule>\n";
-		$rules .= "Options -Indexes\n";
-		$rules .= "# END Secure Media Vault\n";
-
-		// Only write if protection is enabled.
-		if ( ! file_exists( $htaccess ) ) {
-			file_put_contents( $htaccess, $rules ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
-		}
-	}
 }
