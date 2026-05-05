@@ -16,23 +16,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $total_pages = (int) ceil( $total / $per_page );
 ?>
-<div class="wrap smv-wrap">
-	<h1 class="smv-page-title">
+<div class="wrap gpm-wrap">
+	<h1 class="gpm-page-title">
 		<span class="dashicons dashicons-list-view"></span>
-		<?php esc_html_e( 'Secure Media Vault – Access Logs', 'secure-media-vault' ); ?>
+		<?php esc_html_e( 'Guardify Private Media – Access Logs', 'guardify-private-media' ); ?>
 	</h1>
 
 	<?php if ( empty( $logs ) ) : ?>
-		<p><?php esc_html_e( 'No access log entries found.', 'secure-media-vault' ); ?></p>
+		<p><?php esc_html_e( 'No access log entries found.', 'guardify-private-media' ); ?></p>
 	<?php else : ?>
-	<table class="wp-list-table widefat fixed striped smv-logs-table">
+	<table class="wp-list-table widefat fixed striped gpm-logs-table">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Time', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'File', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'User', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'IP Address', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'Status', 'secure-media-vault' ); ?></th>
+				<th><?php esc_html_e( 'Time', 'guardify-private-media' ); ?></th>
+				<th><?php esc_html_e( 'File', 'guardify-private-media' ); ?></th>
+				<th><?php esc_html_e( 'User', 'guardify-private-media' ); ?></th>
+				<th><?php esc_html_e( 'IP Address', 'guardify-private-media' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'guardify-private-media' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -54,13 +54,13 @@ $total_pages = (int) ceil( $total / $per_page );
 						$user = get_userdata( $log->user_id );
 						echo $user ? esc_html( $user->user_login ) : esc_html( sprintf( '#%d', $log->user_id ) );
 					} else {
-						esc_html_e( 'Guest', 'secure-media-vault' );
+						esc_html_e( 'Guest', 'guardify-private-media' );
 					}
 					?>
 				</td>
 				<td><?php echo esc_html( $log->ip_address ); ?></td>
 				<td>
-					<span class="smv-log-status smv-log-status--<?php echo esc_attr( strpos( $log->status, 'denied' ) === 0 ? 'denied' : $log->status ); ?>">
+					<span class="gpm-log-status gpm-log-status--<?php echo esc_attr( strpos( $log->status, 'denied' ) === 0 ? 'denied' : $log->status ); ?>">
 						<?php echo esc_html( $log->status ); ?>
 					</span>
 				</td>

@@ -1,6 +1,6 @@
 # =============================================================================
-# Secure Media Vault – .gitignore
-# https://github.com/umang48/secure-media-vault
+# Guardify Private Media – .gitignore
+# https://github.com/umang48/guardify-private-media
 # =============================================================================
 
 # ── OS & Editor files ────────────────────────────────────────────────────────
@@ -57,7 +57,7 @@ composer.lock
 /wp-content/upgrade/
 /wp-content/themes/
 /wp-content/plugins/*/
-!/wp-content/plugins/secure-media-vault/
+!/wp-content/plugins/guardify-private-media/
 
 # Local wp-config
 wp-config.php

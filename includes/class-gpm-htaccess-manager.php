@@ -2,7 +2,7 @@
 /**
  * .htaccess Manager.
  *
- * Utility class to write, update, and remove Secure Media Vault protection
+ * Utility class to write, update, and remove Guardify Private Media protection
  * rules from the uploads directory .htaccess file.
  *
  * @package SecureMediaVault
@@ -15,23 +15,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_Htaccess_Manager
+ * Class GPM_Htaccess_Manager
  */
-class SMV_Htaccess_Manager {
+class GPM_Htaccess_Manager {
 
 	/**
 	 * Marker for the SMV block begin.
 	 *
 	 * @var string
 	 */
-	const MARKER_BEGIN = '# BEGIN Secure Media Vault';
+	const MARKER_BEGIN = '# BEGIN Guardify Private Media';
 
 	/**
 	 * Marker for the SMV block end.
 	 *
 	 * @var string
 	 */
-	const MARKER_END = '# END Secure Media Vault';
+	const MARKER_END = '# END Guardify Private Media';
 
 	/**
 	 * Write or update the SMV rules in the uploads .htaccess.
@@ -119,11 +119,11 @@ class SMV_Htaccess_Manager {
 		$upload_dir  = wp_upload_dir();
 		$upload_path = rtrim( wp_parse_url( $upload_dir['baseurl'], PHP_URL_PATH ), '/' );
 
-		return "# Secure Media Vault – Nginx Rules\n"
+		return "# Guardify Private Media – Nginx Rules\n"
 			. "# Add these rules inside your server {} block:\n\n"
 			. "location ~* ^{$upload_path}/(.+)$ {\n"
 			. "    deny all;\n"
-			. "    return 302 /protected-media-check/?smv_direct=1&file=\$1;\n"
+			. "    return 302 /protected-media-check/?gpm_direct=1&file=\$1;\n"
 			. "}\n\n"
 			. "# Disable directory listing\n"
 			. "autoindex off;\n";

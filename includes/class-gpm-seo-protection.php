@@ -15,21 +15,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_SEO_Protection
+ * Class GPM_SEO_Protection
  */
-class SMV_SEO_Protection {
+class GPM_SEO_Protection {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var SMV_SEO_Protection
+	 * @var GPM_SEO_Protection
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return SMV_SEO_Protection
+	 * @return GPM_SEO_Protection
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -53,11 +53,11 @@ class SMV_SEO_Protection {
 	 * @return void
 	 */
 	public function add_seo_headers() {
-		if ( ! get_option( 'smv_seo_noindex', true ) ) {
+		if ( ! get_option( 'gpm_seo_noindex', true ) ) {
 			return;
 		}
 
-		$file_id = get_query_var( 'smv_file_id' );
+		$file_id = get_query_var( 'gpm_file_id' );
 		if ( ! empty( $file_id ) ) {
 			header( 'X-Robots-Tag: noindex, nofollow', true );
 		}
@@ -69,14 +69,14 @@ class SMV_SEO_Protection {
 	 * @return void
 	 */
 	public function add_robots_txt_rules() {
-		if ( ! get_option( 'smv_robots_txt', false ) ) {
+		if ( ! get_option( 'gpm_robots_txt', false ) ) {
 			return;
 		}
 
 		$upload_dir    = wp_upload_dir();
 		$uploads_path  = wp_parse_url( $upload_dir['baseurl'], PHP_URL_PATH );
 
-		echo "\n# Secure Media Vault\n";
+		echo "\n# Guardify Private Media\n";
 		echo 'User-agent: *' . "\n";
 		echo 'Disallow: ' . esc_url( $uploads_path ) . '/' . "\n";
 		echo 'Disallow: /protected-media/' . "\n";
@@ -89,7 +89,7 @@ class SMV_SEO_Protection {
 	 * @return array
 	 */
 	public function noindex_attachment_pages( $robots ) {
-		if ( is_attachment() && get_option( 'smv_seo_noindex', true ) ) {
+		if ( is_attachment() && get_option( 'gpm_seo_noindex', true ) ) {
 			$robots['noindex']  = true;
 			$robots['nofollow'] = true;
 		}

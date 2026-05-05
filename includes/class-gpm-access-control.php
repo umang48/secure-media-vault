@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_Access_Control
+ * Class GPM_Access_Control
  */
-class SMV_Access_Control {
+class GPM_Access_Control {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var SMV_Access_Control
+	 * @var GPM_Access_Control
 	 */
 	private static $instance = null;
 
@@ -38,7 +38,7 @@ class SMV_Access_Control {
 	/**
 	 * Get single instance.
 	 *
-	 * @return SMV_Access_Control
+	 * @return GPM_Access_Control
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -81,7 +81,7 @@ class SMV_Access_Control {
 			? wp_json_encode( array_map( 'absint', $settings['allowed_post_ids'] ) )
 			: null;
 
-		$table = esc_sql( $wpdb->prefix . 'smv_protection' );
+		$table = esc_sql( $wpdb->prefix . 'gpm_protection' );
 		$data  = array(
 			'attachment_id'   => $attachment_id,
 			'protection_type' => $protection_type,
@@ -113,10 +113,10 @@ class SMV_Access_Control {
 		}
 
 		// Invalidate cached protection for this attachment.
-		wp_cache_delete( 'smv_protection_' . $attachment_id, 'smv' );
+		wp_cache_delete( 'gpm_protection_' . $attachment_id, 'smv' );
 
 		// Revoke all previously issued tokens when settings change.
-		SMV_Token_Manager::get_instance()->revoke_attachment_tokens( $attachment_id );
+		GPM_Token_Manager::get_instance()->revoke_attachment_tokens( $attachment_id );
 
 		return true;
 	}
@@ -129,7 +129,7 @@ class SMV_Access_Control {
 	 */
 	public function get_protection( $attachment_id ) {
 		$attachment_id = absint( $attachment_id );
-		$cache_key     = 'smv_protection_' . $attachment_id;
+		$cache_key     = 'gpm_protection_' . $attachment_id;
 
 		$cached = wp_cache_get( $cache_key, 'smv' );
 		if ( false !== $cached ) {
@@ -137,7 +137,7 @@ class SMV_Access_Control {
 		}
 
 		global $wpdb;
-		$table = esc_sql( $wpdb->prefix . 'smv_protection' );
+		$table = esc_sql( $wpdb->prefix . 'gpm_protection' );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$row = $wpdb->get_row(
@@ -231,14 +231,14 @@ class SMV_Access_Control {
 
 		if ( empty( $password ) ) {
 			// Allow already-authenticated sessions via transient.
-			$transient_key = 'smv_pw_' . get_current_user_id() . '_' . $protection['attachment_id'];
+			$transient_key = 'gpm_pw_' . get_current_user_id() . '_' . $protection['attachment_id'];
 			return (bool) get_transient( $transient_key );
 		}
 
 		$valid = wp_check_password( $password, $protection['password_hash'] );
 		if ( $valid ) {
 			// Remember for 30 minutes.
-			$transient_key = 'smv_pw_' . get_current_user_id() . '_' . $protection['attachment_id'];
+			$transient_key = 'gpm_pw_' . get_current_user_id() . '_' . $protection['attachment_id'];
 			set_transient( $transient_key, true, 30 * MINUTE_IN_SECONDS );
 		}
 

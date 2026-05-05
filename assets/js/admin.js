@@ -1,5 +1,5 @@
 /**
- * Secure Media Vault – Admin JavaScript
+ * Guardify Private Media – Admin JavaScript
  *
  * @package SecureMediaVault
  * @since   1.0.0
@@ -17,11 +17,11 @@
 	 */
 	function toggleFields( $select ) {
 		var val        = $select.val();
-		var $container = $select.closest( '.smv-attachment-fields' );
+		var $container = $select.closest( '.gpm-attachment-fields' );
 
-		$container.find( '.smv-field-roles'    ).toggle( val === 'roles' );
-		$container.find( '.smv-field-password' ).toggle( val === 'password' );
-		$container.find( '.smv-field-posts'    ).toggle( val === 'posts' );
+		$container.find( '.gpm-field-roles'    ).toggle( val === 'roles' );
+		$container.find( '.gpm-field-password' ).toggle( val === 'password' );
+		$container.find( '.gpm-field-posts'    ).toggle( val === 'posts' );
 	}
 
 	/**
@@ -37,7 +37,7 @@
 		$btn.text( smv.i18n.generating ).prop( 'disabled', true );
 
 		$.post( smv.ajaxUrl, {
-			action        : 'smv_get_secure_url',
+			action        : 'gpm_get_secure_url',
 			nonce         : smv.nonce,
 			attachment_id : attachmentId,
 		} )
@@ -113,7 +113,7 @@
 		$btn.prop( 'disabled', true );
 
 		$.post( smv.ajaxUrl, {
-			action        : 'smv_revoke_tokens',
+			action        : 'gpm_revoke_tokens',
 			nonce         : smv.nonce,
 			attachment_id : attachmentId,
 		} )
@@ -142,27 +142,27 @@
 	$( function () {
 
 		// Initial field visibility.
-		$( '.smv-protection-select' ).each( function () {
+		$( '.gpm-protection-select' ).each( function () {
 			toggleFields( $( this ) );
 		} );
 
 		// Toggle on change.
-		$( document ).on( 'change', '.smv-protection-select', function () {
+		$( document ).on( 'change', '.gpm-protection-select', function () {
 			toggleFields( $( this ) );
 		} );
 
 		// Generate secure URL.
-		$( document ).on( 'click', '.smv-generate-url', function () {
+		$( document ).on( 'click', '.gpm-generate-url', function () {
 			generateSecureUrl( $( this ) );
 		} );
 
 		// Copy URL.
-		$( document ).on( 'click', '.smv-copy-url', function () {
+		$( document ).on( 'click', '.gpm-copy-url', function () {
 			copyUrl( $( this ) );
 		} );
 
 		// Revoke tokens.
-		$( document ).on( 'click', '.smv-revoke-tokens', function () {
+		$( document ).on( 'click', '.gpm-revoke-tokens', function () {
 			revokeTokens( $( this ) );
 		} );
 

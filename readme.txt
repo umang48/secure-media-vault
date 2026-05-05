@@ -1,4 +1,4 @@
-=== Secure Media Vault ===
+=== Guardify Private Media ===
 Contributors: umangapps48
 Donate link: https://phptutorialpoints.in/
 Tags: media protection, secure files, file access control, media library, token url
@@ -13,9 +13,9 @@ Protect WordPress media files with token-based secure delivery, fine-grained acc
 
 == Description ==
 
-**Secure Media Vault** gives you full control over who can access your WordPress media files. Stop search engines, bots, and unauthorised visitors from downloading your protected images, PDFs, videos, or documents.
+**Guardify Private Media** gives you full control over who can access your WordPress media files. Stop search engines, bots, and unauthorised visitors from downloading your protected images, PDFs, videos, or documents.
 
-**Author:** [Umang Prajapati](https://phptutorialpoints.in/) | [WordPress Profile](https://profiles.wordpress.org/umangapps48/) | [GitHub](https://github.com/umang48/secure-media-vault)
+**Author:** [Umang Prajapati](https://phptutorialpoints.in/) | [WordPress Profile](https://profiles.wordpress.org/umangapps48/) | [GitHub](https://github.com/umang48/guardify-private-media)
 
 = Core Features =
 
@@ -73,7 +73,7 @@ The access control system is designed to work alongside WooCommerce. Future vers
 
 == Installation ==
 
-1. Upload the `secure-media-vault` folder to `/wp-content/plugins/`.
+1. Upload the `guardify-private-media` folder to `/wp-content/plugins/`.
 2. Activate the plugin through the **Plugins** screen.
 3. Visit **Media Vault → Settings** to configure your default options.
 4. Open any media file in the **Media Library** and set its protection level.

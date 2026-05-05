@@ -15,21 +15,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_Media_Library
+ * Class GPM_Media_Library
  */
-class SMV_Media_Library {
+class GPM_Media_Library {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var SMV_Media_Library
+	 * @var GPM_Media_Library
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return SMV_Media_Library
+	 * @return GPM_Media_Library
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -73,19 +73,19 @@ class SMV_Media_Library {
 			return $form_fields;
 		}
 
-		$access_control = SMV_Access_Control::get_instance();
+		$access_control = GPM_Access_Control::get_instance();
 		$protection     = $access_control->get_protection( $post->ID );
-		$type           = $protection['protection_type'] ?? SMV_Access_Control::TYPE_PUBLIC;
+		$type           = $protection['protection_type'] ?? GPM_Access_Control::TYPE_PUBLIC;
 		$allowed_roles  = ! empty( $protection['allowed_roles'] ) ? json_decode( $protection['allowed_roles'], true ) : array();
 
 		$all_roles = wp_roles()->get_names();
 
 		ob_start();
-		include SMV_PLUGIN_DIR . 'admin/views/attachment-fields.php';
+		include GPM_PLUGIN_DIR . 'admin/views/attachment-fields.php';
 		$html = ob_get_clean();
 
-		$form_fields['smv_protection'] = array(
-			'label' => __( 'Protection Settings', 'secure-media-vault' ),
+		$form_fields['gpm_protection'] = array(
+			'label' => __( 'Protection Settings', 'guardify-private-media' ),
 			'input' => 'html',
 			'html'  => $html,
 		);
@@ -101,7 +101,7 @@ class SMV_Media_Library {
 	 * @return array
 	 */
 	public function save_protection_fields( $post, $attachment ) {
-		if ( ! isset( $attachment['smv_protection_type'] ) ) {
+		if ( ! isset( $attachment['gpm_protection_type'] ) ) {
 			return $post;
 		}
 
@@ -113,15 +113,15 @@ class SMV_Media_Library {
 		}
 
 		$settings = array(
-			'protection_type'  => sanitize_text_field( $attachment['smv_protection_type'] ),
-			'allowed_roles'    => isset( $attachment['smv_allowed_roles'] ) ? (array) $attachment['smv_allowed_roles'] : array(),
-			'password'         => isset( $attachment['smv_password'] ) ? $attachment['smv_password'] : '',
-			'allowed_post_ids' => isset( $attachment['smv_allowed_post_ids'] )
-				? array_filter( array_map( 'absint', explode( ',', $attachment['smv_allowed_post_ids'] ) ) )
+			'protection_type'  => sanitize_text_field( $attachment['gpm_protection_type'] ),
+			'allowed_roles'    => isset( $attachment['gpm_allowed_roles'] ) ? (array) $attachment['gpm_allowed_roles'] : array(),
+			'password'         => isset( $attachment['gpm_password'] ) ? $attachment['gpm_password'] : '',
+			'allowed_post_ids' => isset( $attachment['gpm_allowed_post_ids'] )
+				? array_filter( array_map( 'absint', explode( ',', $attachment['gpm_allowed_post_ids'] ) ) )
 				: array(),
 		);
 
-		SMV_Access_Control::get_instance()->save_protection( $post['ID'], $settings );
+		GPM_Access_Control::get_instance()->save_protection( $post['ID'], $settings );
 
 		return $post;
 	}
@@ -133,9 +133,9 @@ class SMV_Media_Library {
 	 * @return array
 	 */
 	public function register_bulk_actions( $actions ) {
-		$actions['smv_bulk_protect']           = __( 'SMV: Protect (Logged-in Only)', 'secure-media-vault' );
-		$actions['smv_bulk_protect_admin']     = __( 'SMV: Protect (Admins Only)', 'secure-media-vault' );
-		$actions['smv_bulk_make_public']       = __( 'SMV: Make Public', 'secure-media-vault' );
+		$actions['gpm_bulk_protect']           = __( 'SMV: Protect (Logged-in Only)', 'guardify-private-media' );
+		$actions['gpm_bulk_protect_admin']     = __( 'SMV: Protect (Admins Only)', 'guardify-private-media' );
+		$actions['gpm_bulk_make_public']       = __( 'SMV: Make Public', 'guardify-private-media' );
 		return $actions;
 	}
 
@@ -155,19 +155,19 @@ class SMV_Media_Library {
 		$settings = null;
 
 		switch ( $action ) {
-			case 'smv_bulk_protect':
-				$settings = array( 'protection_type' => SMV_Access_Control::TYPE_LOGGED_IN );
+			case 'gpm_bulk_protect':
+				$settings = array( 'protection_type' => GPM_Access_Control::TYPE_LOGGED_IN );
 				break;
 
-			case 'smv_bulk_protect_admin':
+			case 'gpm_bulk_protect_admin':
 				$settings = array(
-					'protection_type' => SMV_Access_Control::TYPE_ROLES,
+					'protection_type' => GPM_Access_Control::TYPE_ROLES,
 					'allowed_roles'   => array( 'administrator' ),
 				);
 				break;
 
-			case 'smv_bulk_make_public':
-				$settings = array( 'protection_type' => SMV_Access_Control::TYPE_PUBLIC );
+			case 'gpm_bulk_make_public':
+				$settings = array( 'protection_type' => GPM_Access_Control::TYPE_PUBLIC );
 				break;
 		}
 
@@ -175,12 +175,12 @@ class SMV_Media_Library {
 			return $redirect_to;
 		}
 
-		$count = SMV_Access_Control::get_instance()->bulk_protect( $post_ids, $settings );
+		$count = GPM_Access_Control::get_instance()->bulk_protect( $post_ids, $settings );
 
 		return add_query_arg(
 			array(
-				'smv_bulk_done' => $count,
-				'smv_action'    => sanitize_text_field( $action ),
+				'gpm_bulk_done' => $count,
+				'gpm_action'    => sanitize_text_field( $action ),
 			),
 			$redirect_to
 		);
@@ -197,15 +197,15 @@ class SMV_Media_Library {
 			return;
 		}
 
-		if ( empty( $_GET['smv_bulk_done'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( empty( $_GET['gpm_bulk_done'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 
-		$count = absint( $_GET['smv_bulk_done'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$count = absint( $_GET['gpm_bulk_done'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		printf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 			/* translators: %d: number of files updated */
-			esc_html( sprintf( __( 'Secure Media Vault: %d file(s) protection settings updated.', 'secure-media-vault' ), $count ) )
+			esc_html( sprintf( __( 'Guardify Private Media: %d file(s) protection settings updated.', 'guardify-private-media' ), $count ) )
 		);
 	}
 
@@ -216,7 +216,7 @@ class SMV_Media_Library {
 	 * @return array
 	 */
 	public function add_media_columns( $columns ) {
-		$columns['smv_protection'] = __( 'Protection', 'secure-media-vault' );
+		$columns['gpm_protection'] = __( 'Protection', 'guardify-private-media' );
 		return $columns;
 	}
 
@@ -228,43 +228,43 @@ class SMV_Media_Library {
 	 * @return void
 	 */
 	public function render_media_column( $column_name, $post_id ) {
-		if ( 'smv_protection' !== $column_name ) {
+		if ( 'gpm_protection' !== $column_name ) {
 			return;
 		}
 
-		$access_control = SMV_Access_Control::get_instance();
+		$access_control = GPM_Access_Control::get_instance();
 		$protection     = $access_control->get_protection( $post_id );
-		$type           = $protection['protection_type'] ?? SMV_Access_Control::TYPE_PUBLIC;
+		$type           = $protection['protection_type'] ?? GPM_Access_Control::TYPE_PUBLIC;
 
 		$labels = array(
-			SMV_Access_Control::TYPE_PUBLIC    => array(
-				'label' => __( 'Public', 'secure-media-vault' ),
-				'class' => 'smv-status smv-status--public',
+			GPM_Access_Control::TYPE_PUBLIC    => array(
+				'label' => __( 'Public', 'guardify-private-media' ),
+				'class' => 'gpm-status gpm-status--public',
 				'icon'  => 'dashicons-unlock',
 			),
-			SMV_Access_Control::TYPE_LOGGED_IN => array(
-				'label' => __( 'Logged-in', 'secure-media-vault' ),
-				'class' => 'smv-status smv-status--protected',
+			GPM_Access_Control::TYPE_LOGGED_IN => array(
+				'label' => __( 'Logged-in', 'guardify-private-media' ),
+				'class' => 'gpm-status gpm-status--protected',
 				'icon'  => 'dashicons-lock',
 			),
-			SMV_Access_Control::TYPE_ROLES     => array(
-				'label' => __( 'By Role', 'secure-media-vault' ),
-				'class' => 'smv-status smv-status--protected',
+			GPM_Access_Control::TYPE_ROLES     => array(
+				'label' => __( 'By Role', 'guardify-private-media' ),
+				'class' => 'gpm-status gpm-status--protected',
 				'icon'  => 'dashicons-groups',
 			),
-			SMV_Access_Control::TYPE_PASSWORD  => array(
-				'label' => __( 'Password', 'secure-media-vault' ),
-				'class' => 'smv-status smv-status--password',
+			GPM_Access_Control::TYPE_PASSWORD  => array(
+				'label' => __( 'Password', 'guardify-private-media' ),
+				'class' => 'gpm-status gpm-status--password',
 				'icon'  => 'dashicons-key',
 			),
-			SMV_Access_Control::TYPE_POSTS     => array(
-				'label' => __( 'By Post', 'secure-media-vault' ),
-				'class' => 'smv-status smv-status--protected',
+			GPM_Access_Control::TYPE_POSTS     => array(
+				'label' => __( 'By Post', 'guardify-private-media' ),
+				'class' => 'gpm-status gpm-status--protected',
 				'icon'  => 'dashicons-admin-page',
 			),
 		);
 
-		$info = $labels[ $type ] ?? $labels[ SMV_Access_Control::TYPE_PUBLIC ];
+		$info = $labels[ $type ] ?? $labels[ GPM_Access_Control::TYPE_PUBLIC ];
 
 		printf(
 			'<span class="%s"><span class="dashicons %s" aria-hidden="true"></span> %s</span>',
@@ -282,9 +282,9 @@ class SMV_Media_Library {
 	 * @return array
 	 */
 	public function add_protection_to_js( $response, $attachment ) {
-		$protection = SMV_Access_Control::get_instance()->get_protection( $attachment->ID );
-		$response['smvProtectionType'] = $protection['protection_type'] ?? SMV_Access_Control::TYPE_PUBLIC;
-		$response['smvIsProtected']    = SMV_Access_Control::get_instance()->is_protected( $attachment->ID );
+		$protection = GPM_Access_Control::get_instance()->get_protection( $attachment->ID );
+		$response['smvProtectionType'] = $protection['protection_type'] ?? GPM_Access_Control::TYPE_PUBLIC;
+		$response['smvIsProtected']    = GPM_Access_Control::get_instance()->is_protected( $attachment->ID );
 		return $response;
 	}
 }

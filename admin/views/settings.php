@@ -10,54 +10,54 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="wrap smv-wrap">
-	<h1 class="smv-page-title">
+<div class="wrap gpm-wrap">
+	<h1 class="gpm-page-title">
 		<span class="dashicons dashicons-admin-settings"></span>
-		<?php esc_html_e( 'Secure Media Vault – Settings', 'secure-media-vault' ); ?>
+		<?php esc_html_e( 'Guardify Private Media – Settings', 'guardify-private-media' ); ?>
 	</h1>
 
-	<?php settings_errors( 'smv_settings' ); ?>
+	<?php settings_errors( 'gpm_settings' ); ?>
 
 	<form method="post" action="options.php">
-		<?php settings_fields( SMV_Settings::OPTION_GROUP ); ?>
+		<?php settings_fields( GPM_Settings::OPTION_GROUP ); ?>
 
-		<div class="smv-settings-grid">
-			<div class="smv-settings-section">
-				<h2><?php esc_html_e( 'General Settings', 'secure-media-vault' ); ?></h2>
+		<div class="gpm-settings-grid">
+			<div class="gpm-settings-section">
+				<h2><?php esc_html_e( 'General Settings', 'guardify-private-media' ); ?></h2>
 				<table class="form-table" role="presentation">
-					<?php do_settings_fields( SMV_Settings::OPTION_GROUP, 'smv_general' ); ?>
+					<?php do_settings_fields( GPM_Settings::OPTION_GROUP, 'gpm_general' ); ?>
 				</table>
 			</div>
 
-			<div class="smv-settings-section">
-				<h2><?php esc_html_e( 'Token & URL Settings', 'secure-media-vault' ); ?></h2>
+			<div class="gpm-settings-section">
+				<h2><?php esc_html_e( 'Token & URL Settings', 'guardify-private-media' ); ?></h2>
 				<table class="form-table" role="presentation">
-					<?php do_settings_fields( SMV_Settings::OPTION_GROUP, 'smv_token' ); ?>
+					<?php do_settings_fields( GPM_Settings::OPTION_GROUP, 'gpm_token' ); ?>
 				</table>
 			</div>
 
-			<div class="smv-settings-section">
-				<h2><?php esc_html_e( 'SEO & Indexing Protection', 'secure-media-vault' ); ?></h2>
+			<div class="gpm-settings-section">
+				<h2><?php esc_html_e( 'SEO & Indexing Protection', 'guardify-private-media' ); ?></h2>
 				<table class="form-table" role="presentation">
-					<?php do_settings_fields( SMV_Settings::OPTION_GROUP, 'smv_seo' ); ?>
+					<?php do_settings_fields( GPM_Settings::OPTION_GROUP, 'gpm_seo' ); ?>
 				</table>
 			</div>
 
-			<div class="smv-settings-section">
-				<h2><?php esc_html_e( 'Performance', 'secure-media-vault' ); ?></h2>
+			<div class="gpm-settings-section">
+				<h2><?php esc_html_e( 'Performance', 'guardify-private-media' ); ?></h2>
 				<table class="form-table" role="presentation">
-					<?php do_settings_fields( SMV_Settings::OPTION_GROUP, 'smv_performance' ); ?>
+					<?php do_settings_fields( GPM_Settings::OPTION_GROUP, 'gpm_performance' ); ?>
 				</table>
 			</div>
 
-			<div class="smv-settings-section">
-				<h2><?php esc_html_e( 'Access Logging', 'secure-media-vault' ); ?></h2>
+			<div class="gpm-settings-section">
+				<h2><?php esc_html_e( 'Access Logging', 'guardify-private-media' ); ?></h2>
 				<table class="form-table" role="presentation">
-					<?php do_settings_fields( SMV_Settings::OPTION_GROUP, 'smv_logs' ); ?>
+					<?php do_settings_fields( GPM_Settings::OPTION_GROUP, 'gpm_logs' ); ?>
 				</table>
 			</div>
 		</div>
 
-		<?php submit_button( __( 'Save Settings', 'secure-media-vault' ) ); ?>
+		<?php submit_button( __( 'Save Settings', 'guardify-private-media' ) ); ?>
 	</form>
 </div>

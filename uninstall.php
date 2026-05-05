@@ -1,6 +1,6 @@
 <?php
 /**
- * Uninstall – Secure Media Vault.
+ * Uninstall – Guardify Private Media.
  *
  * Fired when the user clicks "Delete" from the Plugins screen.
  * Removes all plugin data: options, database tables, and .htaccess rules.
@@ -16,31 +16,31 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 global $wpdb;
 
 // Remove all plugin options.
-$smv_options = array(
-	'smv_default_protection',
-	'smv_token_expiry',
-	'smv_hotlink_protection',
-	'smv_seo_noindex',
-	'smv_disable_attachments',
-	'smv_robots_txt',
-	'smv_debug_mode',
-	'smv_ip_validation',
-	'smv_stream_large_files',
-	'smv_stream_threshold',
-	'smv_log_access',
-	'smv_log_retention_days',
-	'smv_db_version',
+$gpm_options = array(
+	'gpm_default_protection',
+	'gpm_token_expiry',
+	'gpm_hotlink_protection',
+	'gpm_seo_noindex',
+	'gpm_disable_attachments',
+	'gpm_robots_txt',
+	'gpm_debug_mode',
+	'gpm_ip_validation',
+	'gpm_stream_large_files',
+	'gpm_stream_threshold',
+	'gpm_log_access',
+	'gpm_log_retention_days',
+	'gpm_db_version',
 );
 
-foreach ( $smv_options as $option ) {
+foreach ( $gpm_options as $option ) {
 	delete_option( $option );
 }
 
 // Drop custom tables.
 $tables = array(
-	esc_sql( $wpdb->prefix . 'smv_protection' ),
-	esc_sql( $wpdb->prefix . 'smv_tokens' ),
-	esc_sql( $wpdb->prefix . 'smv_access_logs' ),
+	esc_sql( $wpdb->prefix . 'gpm_protection' ),
+	esc_sql( $wpdb->prefix . 'gpm_tokens' ),
+	esc_sql( $wpdb->prefix . 'gpm_access_logs' ),
 );
 
 foreach ( $tables as $table ) {
@@ -55,12 +55,12 @@ $htaccess   = $upload_dir['basedir'] . '/.htaccess';
 if ( file_exists( $htaccess ) ) {
 	$content = file_get_contents( $htaccess ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 	if ( false !== $content ) {
-		$pattern = '/# BEGIN Secure Media Vault.*?# END Secure Media Vault\n?/s';
+		$pattern = '/# BEGIN Guardify Private Media.*?# END Guardify Private Media\n?/s';
 		$content = preg_replace( $pattern, '', $content );
 		file_put_contents( $htaccess, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 	}
 }
 
 // Clear scheduled events.
-wp_clear_scheduled_hook( 'smv_cleanup_expired_tokens' );
-wp_clear_scheduled_hook( 'smv_cleanup_access_logs' );
+wp_clear_scheduled_hook( 'gpm_cleanup_expired_tokens' );
+wp_clear_scheduled_hook( 'gpm_cleanup_access_logs' );

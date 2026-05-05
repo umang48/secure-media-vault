@@ -15,14 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_Token_Manager
+ * Class GPM_Token_Manager
  */
-class SMV_Token_Manager {
+class GPM_Token_Manager {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var SMV_Token_Manager
+	 * @var GPM_Token_Manager
 	 */
 	private static $instance = null;
 
@@ -36,7 +36,7 @@ class SMV_Token_Manager {
 	/**
 	 * Get single instance.
 	 *
-	 * @return SMV_Token_Manager
+	 * @return GPM_Token_Manager
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -49,10 +49,10 @@ class SMV_Token_Manager {
 	 * Constructor: register cron for token cleanup.
 	 */
 	private function __construct() {
-		add_action( 'smv_cleanup_expired_tokens', array( $this, 'cleanup_expired_tokens' ) );
+		add_action( 'gpm_cleanup_expired_tokens', array( $this, 'cleanup_expired_tokens' ) );
 
-		if ( ! wp_next_scheduled( 'smv_cleanup_expired_tokens' ) ) {
-			wp_schedule_event( time(), 'hourly', 'smv_cleanup_expired_tokens' );
+		if ( ! wp_next_scheduled( 'gpm_cleanup_expired_tokens' ) ) {
+			wp_schedule_event( time(), 'hourly', 'gpm_cleanup_expired_tokens' );
 		}
 	}
 
@@ -67,7 +67,7 @@ class SMV_Token_Manager {
 	public function generate_token( $attachment_id, $user_id = null, $ip_address = '' ) {
 		global $wpdb;
 
-		$expiry_seconds = absint( get_option( 'smv_token_expiry', 3600 ) );
+		$expiry_seconds = absint( get_option( 'gpm_token_expiry', 3600 ) );
 		$expires_at     = gmdate( 'Y-m-d H:i:s', time() + $expiry_seconds );
 
 		// Build token payload.
@@ -87,7 +87,7 @@ class SMV_Token_Manager {
 		$token  = hash_hmac( self::HASH_ALGO, $payload, $secret );
 
 		// Store in DB so we can revoke individual tokens.
-		$table = $wpdb->prefix . 'smv_tokens';
+		$table = $wpdb->prefix . 'gpm_tokens';
 		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$table,
 			array(
@@ -117,8 +117,8 @@ class SMV_Token_Manager {
 		$token         = sanitize_text_field( $token );
 		$attachment_id = absint( $attachment_id );
 
-		$table     = esc_sql( $wpdb->prefix . 'smv_tokens' );
-		$cache_key = 'smv_token_' . $token . '_' . $attachment_id;
+		$table     = esc_sql( $wpdb->prefix . 'gpm_tokens' );
+		$cache_key = 'gpm_token_' . $token . '_' . $attachment_id;
 		$cached    = wp_cache_get( $cache_key, 'smv' );
 
 		if ( false !== $cached ) {
@@ -141,7 +141,7 @@ class SMV_Token_Manager {
 		}
 
 		// Optional IP validation.
-		if ( get_option( 'smv_ip_validation', false ) ) {
+		if ( get_option( 'gpm_ip_validation', false ) ) {
 			if ( $row->ip_address && $row->ip_address !== sanitize_text_field( $ip_address ) ) {
 				return false;
 			}
@@ -159,7 +159,7 @@ class SMV_Token_Manager {
 	public function revoke_token( $token ) {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'smv_tokens';
+		$table = $wpdb->prefix . 'gpm_tokens';
 
 		$deleted = $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
@@ -168,7 +168,7 @@ class SMV_Token_Manager {
 		);
 
 		if ( $deleted ) {
-			wp_cache_delete( 'smv_token_' . sanitize_text_field( $token ), 'smv' );
+			wp_cache_delete( 'gpm_token_' . sanitize_text_field( $token ), 'smv' );
 		}
 
 		return (bool) $deleted;
@@ -183,7 +183,7 @@ class SMV_Token_Manager {
 	public function revoke_attachment_tokens( $attachment_id ) {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'smv_tokens';
+		$table = $wpdb->prefix . 'gpm_tokens';
 
 		$count = (int) $wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$table,
@@ -192,7 +192,7 @@ class SMV_Token_Manager {
 		);
 
 		if ( $count ) {
-			wp_cache_delete( 'smv_protection_' . absint( $attachment_id ), 'smv' );
+			wp_cache_delete( 'gpm_protection_' . absint( $attachment_id ), 'smv' );
 		}
 
 		return $count;
@@ -220,7 +220,7 @@ class SMV_Token_Manager {
 	public function cleanup_expired_tokens() {
 		global $wpdb;
 
-		$table = esc_sql( $wpdb->prefix . 'smv_tokens' );
+		$table = esc_sql( $wpdb->prefix . 'gpm_tokens' );
 		$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
 				"DELETE FROM `{$table}` WHERE expires_at < %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared

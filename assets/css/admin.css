@@ -1,5 +1,5 @@
 /**
- * Secure Media Vault – Admin Stylesheet
+ * Guardify Private Media – Admin Stylesheet
  *
  * @package SecureMediaVault
  * @since   1.0.0
@@ -9,18 +9,18 @@
    Page Layout
    ============================================= */
 
-.smv-wrap {
+.gpm-wrap {
 	max-width: 1200px;
 }
 
-.smv-page-title {
+.gpm-page-title {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	color: #1d2327;
 }
 
-.smv-page-title .dashicons {
+.gpm-page-title .dashicons {
 	font-size: 26px;
 	width: 26px;
 	height: 26px;
@@ -31,14 +31,14 @@
    Stats Grid
    ============================================= */
 
-.smv-stats-grid {
+.gpm-stats-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 	gap: 16px;
 	margin: 24px 0;
 }
 
-.smv-stat-card {
+.gpm-stat-card {
 	display: flex;
 	align-items: center;
 	gap: 16px;
@@ -49,36 +49,36 @@
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-.smv-stat-card--blue  { border-left-color: #2271b1; }
-.smv-stat-card--green { border-left-color: #00a32a; }
-.smv-stat-card--teal  { border-left-color: #0dc0d7; }
-.smv-stat-card--red   { border-left-color: #d63638; }
+.gpm-stat-card--blue  { border-left-color: #2271b1; }
+.gpm-stat-card--green { border-left-color: #00a32a; }
+.gpm-stat-card--teal  { border-left-color: #0dc0d7; }
+.gpm-stat-card--red   { border-left-color: #d63638; }
 
-.smv-stat-icon.dashicons {
+.gpm-stat-icon.dashicons {
 	font-size: 32px;
 	width: 32px;
 	height: 32px;
 	opacity: 0.6;
 }
 
-.smv-stat-card--blue  .smv-stat-icon { color: #2271b1; }
-.smv-stat-card--green .smv-stat-icon { color: #00a32a; }
-.smv-stat-card--teal  .smv-stat-icon { color: #0dc0d7; }
-.smv-stat-card--red   .smv-stat-icon { color: #d63638; }
+.gpm-stat-card--blue  .gpm-stat-icon { color: #2271b1; }
+.gpm-stat-card--green .gpm-stat-icon { color: #00a32a; }
+.gpm-stat-card--teal  .gpm-stat-icon { color: #0dc0d7; }
+.gpm-stat-card--red   .gpm-stat-icon { color: #d63638; }
 
-.smv-stat-content {
+.gpm-stat-content {
 	display: flex;
 	flex-direction: column;
 }
 
-.smv-stat-number {
+.gpm-stat-number {
 	font-size: 28px;
 	font-weight: 600;
 	line-height: 1;
 	color: #1d2327;
 }
 
-.smv-stat-label {
+.gpm-stat-label {
 	font-size: 12px;
 	color: #646970;
 	margin-top: 4px;
@@ -88,22 +88,22 @@
    Quick Links
    ============================================= */
 
-.smv-quick-links {
+.gpm-quick-links {
 	margin: 24px 0;
 }
 
-.smv-quick-links h2 {
+.gpm-quick-links h2 {
 	font-size: 16px;
 	margin-bottom: 12px;
 }
 
-.smv-quick-links-grid {
+.gpm-quick-links-grid {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
 }
 
-.smv-quick-link {
+.gpm-quick-link {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
@@ -117,12 +117,12 @@
 	transition: background 0.15s, border-color 0.15s;
 }
 
-.smv-quick-link:hover {
+.gpm-quick-link:hover {
 	background: #dce9f5;
 	border-color: #2271b1;
 }
 
-.smv-quick-link .dashicons {
+.gpm-quick-link .dashicons {
 	font-size: 16px;
 	width: 16px;
 	height: 16px;
@@ -132,23 +132,23 @@
    Notices & Info Boxes
    ============================================= */
 
-.smv-notice {
+.gpm-notice {
 	padding: 16px 20px;
 	border-radius: 4px;
 	margin: 20px 0;
 }
 
-.smv-notice--warning {
+.gpm-notice--warning {
 	background: #fcf9e8;
 	border-left: 4px solid #dba617;
 }
 
-.smv-notice h3 {
+.gpm-notice h3 {
 	margin: 0 0 8px;
 	font-size: 14px;
 }
 
-.smv-code-block {
+.gpm-code-block {
 	background: #f6f7f7;
 	border: 1px solid #c3c4c7;
 	border-radius: 4px;
@@ -158,7 +158,7 @@
 	overflow-x: auto;
 }
 
-.smv-info-box {
+.gpm-info-box {
 	background: #fff;
 	border: 1px solid #c3c4c7;
 	border-radius: 4px;
@@ -166,16 +166,16 @@
 	margin: 20px 0;
 }
 
-.smv-info-box h3 {
+.gpm-info-box h3 {
 	margin: 0 0 12px;
 }
 
-.smv-info-box ol {
+.gpm-info-box ol {
 	margin: 0;
 	padding-left: 20px;
 }
 
-.smv-info-box li {
+.gpm-info-box li {
 	margin-bottom: 6px;
 	font-size: 13px;
 	color: #3c434a;
@@ -185,12 +185,12 @@
    Settings Page
    ============================================= */
 
-.smv-settings-grid {
+.gpm-settings-grid {
 	display: grid;
 	gap: 0;
 }
 
-.smv-settings-section {
+.gpm-settings-section {
 	background: #fff;
 	border: 1px solid #c3c4c7;
 	border-radius: 4px;
@@ -198,7 +198,7 @@
 	margin-bottom: 16px;
 }
 
-.smv-settings-section h2 {
+.gpm-settings-section h2 {
 	font-size: 15px;
 	margin: 0 0 16px;
 	padding-bottom: 10px;
@@ -210,7 +210,7 @@
    Media Library Status Column
    ============================================= */
 
-.smv-status {
+.gpm-status {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
@@ -220,23 +220,23 @@
 	font-weight: 600;
 }
 
-.smv-status .dashicons {
+.gpm-status .dashicons {
 	font-size: 13px;
 	width: 13px;
 	height: 13px;
 }
 
-.smv-status--public {
+.gpm-status--public {
 	background: #f0f6fc;
 	color: #2271b1;
 }
 
-.smv-status--protected {
+.gpm-status--protected {
 	background: #fcf0f1;
 	color: #d63638;
 }
 
-.smv-status--password {
+.gpm-status--password {
 	background: #fcf9e8;
 	color: #8a6800;
 }
@@ -245,7 +245,7 @@
    Access Logs Table
    ============================================= */
 
-.smv-logs-table .smv-log-status {
+.gpm-logs-table .gpm-log-status {
 	display: inline-block;
 	padding: 2px 8px;
 	border-radius: 20px;
@@ -253,17 +253,17 @@
 	font-weight: 600;
 }
 
-.smv-log-status--granted {
+.gpm-log-status--granted {
 	background: #edfaef;
 	color: #00a32a;
 }
 
-.smv-log-status--denied {
+.gpm-log-status--denied {
 	background: #fcf0f1;
 	color: #d63638;
 }
 
-.smv-log-status--attempt {
+.gpm-log-status--attempt {
 	background: #f0f6fc;
 	color: #2271b1;
 }
@@ -272,18 +272,18 @@
    Attachment Fields
    ============================================= */
 
-.smv-attachment-fields {
+.gpm-attachment-fields {
 	font-size: 13px;
 }
 
-.smv-attachment-fields label {
+.gpm-attachment-fields label {
 	display: block;
 	margin-bottom: 4px;
 }
 
-.smv-field-roles,
-.smv-field-password,
-.smv-field-posts {
+.gpm-field-roles,
+.gpm-field-password,
+.gpm-field-posts {
 	margin-top: 10px;
 	padding: 10px;
 	background: #f6f7f7;

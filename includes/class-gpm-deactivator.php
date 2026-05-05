@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_Deactivator
+ * Class GPM_Deactivator
  */
-class SMV_Deactivator {
+class GPM_Deactivator {
 
 	/**
 	 * Plugin deactivation routine.
@@ -31,7 +31,7 @@ class SMV_Deactivator {
 	}
 
 	/**
-	 * Remove the Secure Media Vault rules from the uploads .htaccess file.
+	 * Remove the Guardify Private Media rules from the uploads .htaccess file.
 	 *
 	 * @return void
 	 */
@@ -49,7 +49,7 @@ class SMV_Deactivator {
 		}
 
 		// Remove the SMV block between markers.
-		$pattern = '/# BEGIN Secure Media Vault.*?# END Secure Media Vault\n?/s';
+		$pattern = '/# BEGIN Guardify Private Media.*?# END Guardify Private Media\n?/s';
 		$content = preg_replace( $pattern, '', $content );
 
 		file_put_contents( $htaccess, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
@@ -61,7 +61,7 @@ class SMV_Deactivator {
 	 * @return void
 	 */
 	private static function clear_scheduled_events() {
-		wp_clear_scheduled_hook( 'smv_cleanup_expired_tokens' );
-		wp_clear_scheduled_hook( 'smv_cleanup_access_logs' );
+		wp_clear_scheduled_hook( 'gpm_cleanup_expired_tokens' );
+		wp_clear_scheduled_hook( 'gpm_cleanup_access_logs' );
 	}
 }

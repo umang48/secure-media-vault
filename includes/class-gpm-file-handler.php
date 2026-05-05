@@ -16,21 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_File_Handler
+ * Class GPM_File_Handler
  */
-class SMV_File_Handler {
+class GPM_File_Handler {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var SMV_File_Handler
+	 * @var GPM_File_Handler
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return SMV_File_Handler
+	 * @return GPM_File_Handler
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -53,8 +53,8 @@ class SMV_File_Handler {
 	 * @return void
 	 */
 	public function handle_secure_request() {
-		$file_id = get_query_var( 'smv_file_id' );
-		$token   = get_query_var( 'smv_token' );
+		$file_id = get_query_var( 'gpm_file_id' );
+		$token   = get_query_var( 'gpm_token' );
 
 		if ( empty( $file_id ) || empty( $token ) ) {
 			return;
@@ -67,18 +67,18 @@ class SMV_File_Handler {
 		$this->log_access( $attachment_id, 'attempt' );
 
 		// Validate token.
-		$token_manager = SMV_Token_Manager::get_instance();
+		$token_manager = GPM_Token_Manager::get_instance();
 		$ip            = $token_manager->get_client_ip();
 
 		if ( ! $token_manager->validate_token( $token, $attachment_id, $ip ) ) {
 			$this->log_access( $attachment_id, 'denied_invalid_token' );
-			$this->deny_access( __( 'Invalid or expired access token.', 'secure-media-vault' ) );
+			$this->deny_access( __( 'Invalid or expired access token.', 'guardify-private-media' ) );
 			return;
 		}
 
 		// Check access control rules.
-		$password      = isset( $_POST['smv_password'] ) ? sanitize_text_field( wp_unslash( $_POST['smv_password'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$access_control = SMV_Access_Control::get_instance();
+		$password      = isset( $_POST['gpm_password'] ) ? sanitize_text_field( wp_unslash( $_POST['gpm_password'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$access_control = GPM_Access_Control::get_instance();
 
 		if ( ! $access_control->is_access_allowed( $attachment_id, $password ) ) {
 			$protection = $access_control->get_protection( $attachment_id );
@@ -87,15 +87,15 @@ class SMV_File_Handler {
 				return;
 			}
 			$this->log_access( $attachment_id, 'denied_access_control' );
-			$this->deny_access( __( 'You do not have permission to access this file.', 'secure-media-vault' ) );
+			$this->deny_access( __( 'You do not have permission to access this file.', 'guardify-private-media' ) );
 			return;
 		}
 
 		// Check hotlink protection.
-		if ( get_option( 'smv_hotlink_protection', true ) ) {
+		if ( get_option( 'gpm_hotlink_protection', true ) ) {
 			if ( $this->is_hotlink() ) {
 				$this->log_access( $attachment_id, 'denied_hotlink' );
-				$this->deny_access( __( 'Hotlinking is not allowed.', 'secure-media-vault' ) );
+				$this->deny_access( __( 'Hotlinking is not allowed.', 'guardify-private-media' ) );
 				return;
 			}
 		}
@@ -104,7 +104,7 @@ class SMV_File_Handler {
 		$file_path = get_attached_file( $attachment_id );
 		if ( ! $file_path || ! file_exists( $file_path ) ) {
 			$this->log_access( $attachment_id, 'denied_file_not_found' );
-			wp_die( esc_html__( 'File not found.', 'secure-media-vault' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'File not found.', 'guardify-private-media' ), '', array( 'response' => 404 ) );
 			return;
 		}
 
@@ -140,8 +140,8 @@ class SMV_File_Handler {
 		header( 'Content-Type: ' . $mime_type );
 		header( 'Content-Disposition: inline; filename="' . esc_attr( $file_name ) . '"' );
 
-		$stream_threshold_mb = absint( get_option( 'smv_stream_threshold', 10 ) );
-		$use_streaming       = get_option( 'smv_stream_large_files', true );
+		$stream_threshold_mb = absint( get_option( 'gpm_stream_threshold', 10 ) );
+		$use_streaming       = get_option( 'gpm_stream_large_files', true );
 
 		if ( $use_streaming && $file_size > $stream_threshold_mb * 1024 * 1024 ) {
 			$this->stream_file( $file_path, $file_size );
@@ -185,7 +185,7 @@ class SMV_File_Handler {
 		$fp         = fopen( $file_path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
 		if ( ! $fp ) {
-			wp_die( esc_html__( 'Unable to read file.', 'secure-media-vault' ), '', array( 'response' => 500 ) );
+			wp_die( esc_html__( 'Unable to read file.', 'guardify-private-media' ), '', array( 'response' => 500 ) );
 		}
 
 		fseek( $fp, $start );
@@ -212,13 +212,13 @@ class SMV_File_Handler {
 	 * @return string
 	 */
 	public function maybe_replace_url( $url, $attachment_id ) {
-		if ( ! SMV_Access_Control::get_instance()->is_protected( $attachment_id ) ) {
+		if ( ! GPM_Access_Control::get_instance()->is_protected( $attachment_id ) ) {
 			return $url;
 		}
 
 		$user_id = is_user_logged_in() ? get_current_user_id() : null;
 
-		return SMV_Token_Manager::get_instance()->get_secure_url( $attachment_id, $user_id );
+		return GPM_Token_Manager::get_instance()->get_secure_url( $attachment_id, $user_id );
 	}
 
 	/**
@@ -248,7 +248,7 @@ class SMV_File_Handler {
 	private function deny_access( $message ) {
 		wp_die(
 			esc_html( $message ),
-			esc_html__( 'Access Denied', 'secure-media-vault' ),
+			esc_html__( 'Access Denied', 'guardify-private-media' ),
 			array( 'response' => 403 )
 		);
 	}
@@ -268,26 +268,20 @@ class SMV_File_Handler {
 		<head>
 			<meta charset="UTF-8">
 			<meta name="robots" content="noindex, nofollow">
-			<title><?php esc_html_e( 'Protected File – Enter Password', 'secure-media-vault' ); ?></title>
-			<style>
-				body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f0f0f1; }
-				.smv-form { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 20px rgba(0,0,0,.12); max-width: 360px; width: 100%; }
-				h2 { margin: 0 0 1rem; font-size: 1.25rem; color: #1d2327; }
-				label { display: block; font-size: .875rem; margin-bottom: .35rem; color: #3c434a; }
-				input[type=password] { width: 100%; padding: .5rem .75rem; border: 1px solid #c3c4c7; border-radius: 4px; font-size: 1rem; box-sizing: border-box; }
-				button { margin-top: 1rem; width: 100%; padding: .6rem; background: #2271b1; color: #fff; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
-				button:hover { background: #135e96; }
-				.smv-error { color: #d63638; font-size: .875rem; margin-top: .5rem; }
-			</style>
+			<title><?php esc_html_e( 'Protected File – Enter Password', 'guardify-private-media' ); ?></title>
+			<?php
+			wp_enqueue_style( 'gpm-password-form', GPM_PLUGIN_URL . 'assets/css/password-form.css', array(), GPM_VERSION );
+			wp_print_styles( 'gpm-password-form' );
+			?>
 		</head>
 		<body>
-		<div class="smv-form">
-			<h2><?php esc_html_e( 'This file is password protected', 'secure-media-vault' ); ?></h2>
+		<div class="gpm-form">
+			<h2><?php esc_html_e( 'This file is password protected', 'guardify-private-media' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( $action_url ); ?>">
-				<?php wp_nonce_field( 'smv_password_access_' . $attachment_id, 'smv_nonce' ); ?>
-				<label for="smv_password"><?php esc_html_e( 'Enter password to access this file:', 'secure-media-vault' ); ?></label>
-				<input type="password" id="smv_password" name="smv_password" required autocomplete="current-password">
-				<button type="submit"><?php esc_html_e( 'Access File', 'secure-media-vault' ); ?></button>
+				<?php wp_nonce_field( 'gpm_password_access_' . $attachment_id, 'gpm_nonce' ); ?>
+				<label for="gpm_password"><?php esc_html_e( 'Enter password to access this file:', 'guardify-private-media' ); ?></label>
+				<input type="password" id="gpm_password" name="gpm_password" required autocomplete="current-password">
+				<button type="submit"><?php esc_html_e( 'Access File', 'guardify-private-media' ); ?></button>
 			</form>
 		</div>
 		</body>
@@ -304,14 +298,14 @@ class SMV_File_Handler {
 	 * @return void
 	 */
 	private function log_access( $attachment_id, $status ) {
-		if ( ! get_option( 'smv_log_access', true ) ) {
+		if ( ! get_option( 'gpm_log_access', true ) ) {
 			return;
 		}
 
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'smv_access_logs';
-		$ip    = SMV_Token_Manager::get_instance()->get_client_ip();
+		$table = $wpdb->prefix . 'gpm_access_logs';
+		$ip    = GPM_Token_Manager::get_instance()->get_client_ip();
 
 		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$table,

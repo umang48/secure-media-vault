@@ -16,21 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class SMV_Rewrite_Rules
+ * Class GPM_Rewrite_Rules
  */
-class SMV_Rewrite_Rules {
+class GPM_Rewrite_Rules {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var SMV_Rewrite_Rules
+	 * @var GPM_Rewrite_Rules
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return SMV_Rewrite_Rules
+	 * @return GPM_Rewrite_Rules
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -58,13 +58,13 @@ class SMV_Rewrite_Rules {
 		// Secure file delivery endpoint.
 		add_rewrite_rule(
 			'^protected-media/([0-9]+)/([a-zA-Z0-9_-]+)/?$',
-			'index.php?smv_file_id=$matches[1]&smv_token=$matches[2]',
+			'index.php?gpm_file_id=$matches[1]&gpm_token=$matches[2]',
 			'top'
 		);
 		// Diagnostic endpoint: handles redirects from .htaccess for blocked direct access.
 		add_rewrite_rule(
 			'^protected-media-check/?$',
-			'index.php?smv_direct=1',
+			'index.php?gpm_direct=1',
 			'top'
 		);
 	}
@@ -76,9 +76,9 @@ class SMV_Rewrite_Rules {
 	 * @return array Modified query vars.
 	 */
 	public function add_query_vars( $vars ) {
-		$vars[] = 'smv_file_id';
-		$vars[] = 'smv_token';
-		$vars[] = 'smv_direct';
+		$vars[] = 'gpm_file_id';
+		$vars[] = 'gpm_token';
+		$vars[] = 'gpm_direct';
 		$vars[] = 'file';
 		return $vars;
 	}
@@ -96,10 +96,10 @@ class SMV_Rewrite_Rules {
 	 * @return void
 	 */
 	public function handle_direct_access_check() {
-		// Only fire on requests that carry ?smv_direct=1.
-		if ( '1' !== get_query_var( 'smv_direct' ) ) {
+		// Only fire on requests that carry ?gpm_direct=1.
+		if ( '1' !== get_query_var( 'gpm_direct' ) ) {
 			// Also support plain $_GET for non-rewrite requests.
-			if ( empty( $_GET['smv_direct'] ) || '1' !== $_GET['smv_direct'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( empty( $_GET['gpm_direct'] ) || '1' !== $_GET['gpm_direct'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				return;
 			}
 		}
@@ -134,7 +134,7 @@ class SMV_Rewrite_Rules {
 		}
 
 		// Check protection status.
-		$access_control = SMV_Access_Control::get_instance();
+		$access_control = GPM_Access_Control::get_instance();
 		$is_protected   = $attachment_id ? $access_control->is_protected( $attachment_id ) : false;
 
 		if ( ! $is_protected ) {
@@ -155,7 +155,7 @@ class SMV_Rewrite_Rules {
 			}
 
 			// File not found on disk.
-			wp_die( esc_html__( 'File not found.', 'secure-media-vault' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'File not found.', 'guardify-private-media' ), '', array( 'response' => 404 ) );
 		}
 
 		// Protected file — inform the client.
@@ -164,7 +164,7 @@ class SMV_Rewrite_Rules {
 				'smv'       => true,
 				'protected' => true,
 				'file'      => $file_uri,
-				'message'   => __( 'Direct access is blocked. Use the secure URL to access this file.', 'secure-media-vault' ),
+				'message'   => __( 'Direct access is blocked. Use the secure URL to access this file.', 'guardify-private-media' ),
 			),
 			403
 		);
@@ -176,7 +176,7 @@ class SMV_Rewrite_Rules {
 	 * @return void
 	 */
 	public function disable_attachment_pages() {
-		if ( ! get_option( 'smv_disable_attachments', true ) ) {
+		if ( ! get_option( 'gpm_disable_attachments', true ) ) {
 			return;
 		}
 
