@@ -1,11 +1,11 @@
 <?php
 /**
- * Uninstall – Guardify Private Media.
+ * Uninstall – Restricted Media Access.
  *
  * Fired when the user clicks "Delete" from the Plugins screen.
  * Removes all plugin data: options, database tables, and .htaccess rules.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  */
 
 // Only run when WordPress calls this file during uninstall.
@@ -16,51 +16,51 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 global $wpdb;
 
 // Remove all plugin options.
-$gpm_options = array(
-	'gpm_default_protection',
-	'gpm_token_expiry',
-	'gpm_hotlink_protection',
-	'gpm_seo_noindex',
-	'gpm_disable_attachments',
-	'gpm_robots_txt',
-	'gpm_debug_mode',
-	'gpm_ip_validation',
-	'gpm_stream_large_files',
-	'gpm_stream_threshold',
-	'gpm_log_access',
-	'gpm_log_retention_days',
-	'gpm_db_version',
+$urma_options = array(
+	'urma_default_protection',
+	'urma_token_expiry',
+	'urma_hotlink_protection',
+	'urma_seo_noindex',
+	'urma_disable_attachments',
+	'urma_robots_txt',
+	'urma_debug_mode',
+	'urma_ip_validation',
+	'urma_stream_large_files',
+	'urma_stream_threshold',
+	'urma_log_access',
+	'urma_log_retention_days',
+	'urma_db_version',
 );
 
-foreach ( $gpm_options as $option ) {
-	delete_option( $option );
+foreach ( $urma_options as $urma_option ) {
+	delete_option( $urma_option );
 }
 
 // Drop custom tables.
-$tables = array(
-	esc_sql( $wpdb->prefix . 'gpm_protection' ),
-	esc_sql( $wpdb->prefix . 'gpm_tokens' ),
-	esc_sql( $wpdb->prefix . 'gpm_access_logs' ),
+$urma_tables = array(
+	esc_sql( $wpdb->prefix . 'urma_protection' ),
+	esc_sql( $wpdb->prefix . 'urma_tokens' ),
+	esc_sql( $wpdb->prefix . 'urma_access_logs' ),
 );
 
-foreach ( $tables as $table ) {
+foreach ( $urma_tables as $urma_table ) {
 	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-	$wpdb->query( "DROP TABLE IF EXISTS `{$table}`" );
+	$wpdb->query( "DROP TABLE IF EXISTS `{$urma_table}`" );
 }
 
 // Remove uploads .htaccess rules.
-$upload_dir = wp_upload_dir();
-$htaccess   = $upload_dir['basedir'] . '/.htaccess';
+$urma_upload_dir = wp_upload_dir();
+$urma_htaccess   = $urma_upload_dir['basedir'] . '/.htaccess';
 
-if ( file_exists( $htaccess ) ) {
-	$content = file_get_contents( $htaccess ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
-	if ( false !== $content ) {
-		$pattern = '/# BEGIN Guardify Private Media.*?# END Guardify Private Media\n?/s';
-		$content = preg_replace( $pattern, '', $content );
-		file_put_contents( $htaccess, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+if ( file_exists( $urma_htaccess ) ) {
+	$urma_content = file_get_contents( $urma_htaccess ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+	if ( false !== $urma_content ) {
+		$urma_pattern = '/# BEGIN Restricted Media Access.*?# END Restricted Media Access\n?/s';
+		$urma_content = preg_replace( $urma_pattern, '', $urma_content );
+		file_put_contents( $urma_htaccess, $urma_content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 	}
 }
 
 // Clear scheduled events.
-wp_clear_scheduled_hook( 'gpm_cleanup_expired_tokens' );
-wp_clear_scheduled_hook( 'gpm_cleanup_access_logs' );
+wp_clear_scheduled_hook( 'urma_cleanup_expired_tokens' );
+wp_clear_scheduled_hook( 'urma_cleanup_access_logs' );

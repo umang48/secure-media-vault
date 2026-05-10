@@ -1,7 +1,7 @@
 /**
- * Guardify Private Media – Admin Stylesheet
+ * Umang Restricted Media Access – Admin Stylesheet
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -9,18 +9,18 @@
    Page Layout
    ============================================= */
 
-.gpm-wrap {
+.urma-wrap {
 	max-width: 1200px;
 }
 
-.gpm-page-title {
+.urma-page-title {
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	color: #1d2327;
 }
 
-.gpm-page-title .dashicons {
+.urma-page-title .dashicons {
 	font-size: 26px;
 	width: 26px;
 	height: 26px;
@@ -31,14 +31,14 @@
    Stats Grid
    ============================================= */
 
-.gpm-stats-grid {
+.urma-stats-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 	gap: 16px;
 	margin: 24px 0;
 }
 
-.gpm-stat-card {
+.urma-stat-card {
 	display: flex;
 	align-items: center;
 	gap: 16px;
@@ -49,36 +49,36 @@
 	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
-.gpm-stat-card--blue  { border-left-color: #2271b1; }
-.gpm-stat-card--green { border-left-color: #00a32a; }
-.gpm-stat-card--teal  { border-left-color: #0dc0d7; }
-.gpm-stat-card--red   { border-left-color: #d63638; }
+.urma-stat-card--blue  { border-left-color: #2271b1; }
+.urma-stat-card--green { border-left-color: #00a32a; }
+.urma-stat-card--teal  { border-left-color: #0dc0d7; }
+.urma-stat-card--red   { border-left-color: #d63638; }
 
-.gpm-stat-icon.dashicons {
+.urma-stat-icon.dashicons {
 	font-size: 32px;
 	width: 32px;
 	height: 32px;
 	opacity: 0.6;
 }
 
-.gpm-stat-card--blue  .gpm-stat-icon { color: #2271b1; }
-.gpm-stat-card--green .gpm-stat-icon { color: #00a32a; }
-.gpm-stat-card--teal  .gpm-stat-icon { color: #0dc0d7; }
-.gpm-stat-card--red   .gpm-stat-icon { color: #d63638; }
+.urma-stat-card--blue  .urma-stat-icon { color: #2271b1; }
+.urma-stat-card--green .urma-stat-icon { color: #00a32a; }
+.urma-stat-card--teal  .urma-stat-icon { color: #0dc0d7; }
+.urma-stat-card--red   .urma-stat-icon { color: #d63638; }
 
-.gpm-stat-content {
+.urma-stat-content {
 	display: flex;
 	flex-direction: column;
 }
 
-.gpm-stat-number {
+.urma-stat-number {
 	font-size: 28px;
 	font-weight: 600;
 	line-height: 1;
 	color: #1d2327;
 }
 
-.gpm-stat-label {
+.urma-stat-label {
 	font-size: 12px;
 	color: #646970;
 	margin-top: 4px;
@@ -88,22 +88,22 @@
    Quick Links
    ============================================= */
 
-.gpm-quick-links {
+.urma-quick-links {
 	margin: 24px 0;
 }
 
-.gpm-quick-links h2 {
+.urma-quick-links h2 {
 	font-size: 16px;
 	margin-bottom: 12px;
 }
 
-.gpm-quick-links-grid {
+.urma-quick-links-grid {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 10px;
 }
 
-.gpm-quick-link {
+.urma-quick-link {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
@@ -117,12 +117,12 @@
 	transition: background 0.15s, border-color 0.15s;
 }
 
-.gpm-quick-link:hover {
+.urma-quick-link:hover {
 	background: #dce9f5;
 	border-color: #2271b1;
 }
 
-.gpm-quick-link .dashicons {
+.urma-quick-link .dashicons {
 	font-size: 16px;
 	width: 16px;
 	height: 16px;
@@ -132,23 +132,23 @@
    Notices & Info Boxes
    ============================================= */
 
-.gpm-notice {
+.urma-notice {
 	padding: 16px 20px;
 	border-radius: 4px;
 	margin: 20px 0;
 }
 
-.gpm-notice--warning {
+.urma-notice--warning {
 	background: #fcf9e8;
 	border-left: 4px solid #dba617;
 }
 
-.gpm-notice h3 {
+.urma-notice h3 {
 	margin: 0 0 8px;
 	font-size: 14px;
 }
 
-.gpm-code-block {
+.urma-code-block {
 	background: #f6f7f7;
 	border: 1px solid #c3c4c7;
 	border-radius: 4px;
@@ -158,7 +158,7 @@
 	overflow-x: auto;
 }
 
-.gpm-info-box {
+.urma-info-box {
 	background: #fff;
 	border: 1px solid #c3c4c7;
 	border-radius: 4px;
@@ -166,16 +166,16 @@
 	margin: 20px 0;
 }
 
-.gpm-info-box h3 {
+.urma-info-box h3 {
 	margin: 0 0 12px;
 }
 
-.gpm-info-box ol {
+.urma-info-box ol {
 	margin: 0;
 	padding-left: 20px;
 }
 
-.gpm-info-box li {
+.urma-info-box li {
 	margin-bottom: 6px;
 	font-size: 13px;
 	color: #3c434a;
@@ -185,12 +185,12 @@
    Settings Page
    ============================================= */
 
-.gpm-settings-grid {
+.urma-settings-grid {
 	display: grid;
 	gap: 0;
 }
 
-.gpm-settings-section {
+.urma-settings-section {
 	background: #fff;
 	border: 1px solid #c3c4c7;
 	border-radius: 4px;
@@ -198,7 +198,7 @@
 	margin-bottom: 16px;
 }
 
-.gpm-settings-section h2 {
+.urma-settings-section h2 {
 	font-size: 15px;
 	margin: 0 0 16px;
 	padding-bottom: 10px;
@@ -210,7 +210,7 @@
    Media Library Status Column
    ============================================= */
 
-.gpm-status {
+.urma-status {
 	display: inline-flex;
 	align-items: center;
 	gap: 4px;
@@ -220,23 +220,23 @@
 	font-weight: 600;
 }
 
-.gpm-status .dashicons {
+.urma-status .dashicons {
 	font-size: 13px;
 	width: 13px;
 	height: 13px;
 }
 
-.gpm-status--public {
+.urma-status--public {
 	background: #f0f6fc;
 	color: #2271b1;
 }
 
-.gpm-status--protected {
+.urma-status--protected {
 	background: #fcf0f1;
 	color: #d63638;
 }
 
-.gpm-status--password {
+.urma-status--password {
 	background: #fcf9e8;
 	color: #8a6800;
 }
@@ -245,7 +245,7 @@
    Access Logs Table
    ============================================= */
 
-.gpm-logs-table .gpm-log-status {
+.urma-logs-table .urma-log-status {
 	display: inline-block;
 	padding: 2px 8px;
 	border-radius: 20px;
@@ -253,17 +253,17 @@
 	font-weight: 600;
 }
 
-.gpm-log-status--granted {
+.urma-log-status--granted {
 	background: #edfaef;
 	color: #00a32a;
 }
 
-.gpm-log-status--denied {
+.urma-log-status--denied {
 	background: #fcf0f1;
 	color: #d63638;
 }
 
-.gpm-log-status--attempt {
+.urma-log-status--attempt {
 	background: #f0f6fc;
 	color: #2271b1;
 }
@@ -272,18 +272,18 @@
    Attachment Fields
    ============================================= */
 
-.gpm-attachment-fields {
+.urma-attachment-fields {
 	font-size: 13px;
 }
 
-.gpm-attachment-fields label {
+.urma-attachment-fields label {
 	display: block;
 	margin-bottom: 4px;
 }
 
-.gpm-field-roles,
-.gpm-field-password,
-.gpm-field-posts {
+.urma-field-roles,
+.urma-field-password,
+.urma-field-posts {
 	margin-top: 10px;
 	padding: 10px;
 	background: #f6f7f7;

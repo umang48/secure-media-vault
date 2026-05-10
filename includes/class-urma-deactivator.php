@@ -5,7 +5,7 @@
  * Handles cleanup on plugin deactivation: flush rewrite rules, remove
  * upload directory .htaccess protection rules, and clean up scheduled events.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class GPM_Deactivator
+ * Class URMA_Deactivator
  */
-class GPM_Deactivator {
+class URMA_Deactivator {
 
 	/**
 	 * Plugin deactivation routine.
@@ -31,7 +31,7 @@ class GPM_Deactivator {
 	}
 
 	/**
-	 * Remove the Guardify Private Media rules from the uploads .htaccess file.
+	 * Remove the Restricted Media Access rules from the uploads .htaccess file.
 	 *
 	 * @return void
 	 */
@@ -49,7 +49,7 @@ class GPM_Deactivator {
 		}
 
 		// Remove the SMV block between markers.
-		$pattern = '/# BEGIN Guardify Private Media.*?# END Guardify Private Media\n?/s';
+		$pattern = '/# BEGIN Restricted Media Access.*?# END Restricted Media Access\n?/s';
 		$content = preg_replace( $pattern, '', $content );
 
 		file_put_contents( $htaccess, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
@@ -61,7 +61,7 @@ class GPM_Deactivator {
 	 * @return void
 	 */
 	private static function clear_scheduled_events() {
-		wp_clear_scheduled_hook( 'gpm_cleanup_expired_tokens' );
-		wp_clear_scheduled_hook( 'gpm_cleanup_access_logs' );
+		wp_clear_scheduled_hook( 'urma_cleanup_expired_tokens' );
+		wp_clear_scheduled_hook( 'urma_cleanup_access_logs' );
 	}
 }

@@ -2,7 +2,7 @@
 /**
  * Admin view: Dashboard.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @var int $total_protected
  * @var int $total_tokens
  * @var int $total_granted
@@ -14,80 +14,80 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<div class="wrap gpm-wrap">
-	<h1 class="gpm-page-title">
+<div class="wrap urma-wrap">
+	<h1 class="urma-page-title">
 		<span class="dashicons dashicons-lock"></span>
-		<?php esc_html_e( 'Guardify Private Media – Dashboard', 'guardify-private-media' ); ?>
+		<?php esc_html_e( 'Umang Restricted Media Access – Dashboard', 'secure-media-vault' ); ?>
 	</h1>
 
-	<div class="gpm-stats-grid">
-		<div class="gpm-stat-card gpm-stat-card--blue">
-			<div class="gpm-stat-icon dashicons dashicons-lock"></div>
-			<div class="gpm-stat-content">
-				<span class="gpm-stat-number"><?php echo esc_html( number_format_i18n( $total_protected ) ); ?></span>
-				<span class="gpm-stat-label"><?php esc_html_e( 'Protected Files', 'guardify-private-media' ); ?></span>
+	<div class="urma-stats-grid">
+		<div class="urma-stat-card urma-stat-card--blue">
+			<div class="urma-stat-icon dashicons dashicons-lock"></div>
+			<div class="urma-stat-content">
+				<span class="urma-stat-number"><?php echo esc_html( number_format_i18n( $total_protected ) ); ?></span>
+				<span class="urma-stat-label"><?php esc_html_e( 'Protected Files', 'secure-media-vault' ); ?></span>
 			</div>
 		</div>
-		<div class="gpm-stat-card gpm-stat-card--green">
-			<div class="gpm-stat-icon dashicons dashicons-tickets-alt"></div>
-			<div class="gpm-stat-content">
-				<span class="gpm-stat-number"><?php echo esc_html( number_format_i18n( $total_tokens ) ); ?></span>
-				<span class="gpm-stat-label"><?php esc_html_e( 'Active Tokens', 'guardify-private-media' ); ?></span>
+		<div class="urma-stat-card urma-stat-card--green">
+			<div class="urma-stat-icon dashicons dashicons-tickets-alt"></div>
+			<div class="urma-stat-content">
+				<span class="urma-stat-number"><?php echo esc_html( number_format_i18n( $total_tokens ) ); ?></span>
+				<span class="urma-stat-label"><?php esc_html_e( 'Active Tokens', 'secure-media-vault' ); ?></span>
 			</div>
 		</div>
-		<div class="gpm-stat-card gpm-stat-card--teal">
-			<div class="gpm-stat-icon dashicons dashicons-yes-alt"></div>
-			<div class="gpm-stat-content">
-				<span class="gpm-stat-number"><?php echo esc_html( number_format_i18n( $total_granted ) ); ?></span>
-				<span class="gpm-stat-label"><?php esc_html_e( 'Granted (7 days)', 'guardify-private-media' ); ?></span>
+		<div class="urma-stat-card urma-stat-card--teal">
+			<div class="urma-stat-icon dashicons dashicons-yes-alt"></div>
+			<div class="urma-stat-content">
+				<span class="urma-stat-number"><?php echo esc_html( number_format_i18n( $total_granted ) ); ?></span>
+				<span class="urma-stat-label"><?php esc_html_e( 'Granted (7 days)', 'secure-media-vault' ); ?></span>
 			</div>
 		</div>
-		<div class="gpm-stat-card gpm-stat-card--red">
-			<div class="gpm-stat-icon dashicons dashicons-dismiss"></div>
-			<div class="gpm-stat-content">
-				<span class="gpm-stat-number"><?php echo esc_html( number_format_i18n( $total_denied ) ); ?></span>
-				<span class="gpm-stat-label"><?php esc_html_e( 'Denied (7 days)', 'guardify-private-media' ); ?></span>
+		<div class="urma-stat-card urma-stat-card--red">
+			<div class="urma-stat-icon dashicons dashicons-dismiss"></div>
+			<div class="urma-stat-content">
+				<span class="urma-stat-number"><?php echo esc_html( number_format_i18n( $total_denied ) ); ?></span>
+				<span class="urma-stat-label"><?php esc_html_e( 'Denied (7 days)', 'secure-media-vault' ); ?></span>
 			</div>
 		</div>
 	</div>
 
-	<div class="gpm-quick-links">
-		<h2><?php esc_html_e( 'Quick Actions', 'guardify-private-media' ); ?></h2>
-		<div class="gpm-quick-links-grid">
-			<a href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>" class="gpm-quick-link">
+	<div class="urma-quick-links">
+		<h2><?php esc_html_e( 'Quick Actions', 'secure-media-vault' ); ?></h2>
+		<div class="urma-quick-links-grid">
+			<a href="<?php echo esc_url( admin_url( 'upload.php' ) ); ?>" class="urma-quick-link">
 				<span class="dashicons dashicons-admin-media"></span>
-				<?php esc_html_e( 'Media Library', 'guardify-private-media' ); ?>
+				<?php esc_html_e( 'Media Library', 'secure-media-vault' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=gpm-settings' ) ); ?>" class="gpm-quick-link">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=urma-settings' ) ); ?>" class="urma-quick-link">
 				<span class="dashicons dashicons-admin-settings"></span>
-				<?php esc_html_e( 'Settings', 'guardify-private-media' ); ?>
+				<?php esc_html_e( 'Settings', 'secure-media-vault' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=gpm-logs' ) ); ?>" class="gpm-quick-link">
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=urma-logs' ) ); ?>" class="urma-quick-link">
 				<span class="dashicons dashicons-list-view"></span>
-				<?php esc_html_e( 'Access Logs', 'guardify-private-media' ); ?>
+				<?php esc_html_e( 'Access Logs', 'secure-media-vault' ); ?>
 			</a>
-			<a href="<?php echo esc_url( admin_url( 'options-permalink.php' ) ); ?>" class="gpm-quick-link">
+			<a href="<?php echo esc_url( admin_url( 'options-permalink.php' ) ); ?>" class="urma-quick-link">
 				<span class="dashicons dashicons-admin-links"></span>
-				<?php esc_html_e( 'Flush Permalinks', 'guardify-private-media' ); ?>
+				<?php esc_html_e( 'Flush Permalinks', 'secure-media-vault' ); ?>
 			</a>
 		</div>
 	</div>
 
-	<?php if ( ! GPM_Htaccess_Manager::is_apache() ) : ?>
-	<div class="gpm-notice gpm-notice--warning">
-		<h3><?php esc_html_e( 'Nginx Detected – Manual Configuration Required', 'guardify-private-media' ); ?></h3>
-		<p><?php esc_html_e( 'This server appears to use Nginx. Add the following rules to your Nginx server block to block direct file access:', 'guardify-private-media' ); ?></p>
-		<pre class="gpm-code-block"><?php echo esc_html( GPM_Htaccess_Manager::get_nginx_rules() ); ?></pre>
+	<?php if ( ! URMA_Htaccess_Manager::is_apache() ) : ?>
+	<div class="urma-notice urma-notice--warning">
+		<h3><?php esc_html_e( 'Nginx Detected – Manual Configuration Required', 'secure-media-vault' ); ?></h3>
+		<p><?php esc_html_e( 'This server appears to use Nginx. Add the following rules to your Nginx server block to block direct file access:', 'secure-media-vault' ); ?></p>
+		<pre class="urma-code-block"><?php echo esc_html( URMA_Htaccess_Manager::get_nginx_rules() ); ?></pre>
 	</div>
 	<?php endif; ?>
 
-	<div class="gpm-info-box">
-		<h3><?php esc_html_e( 'How it Works', 'guardify-private-media' ); ?></h3>
+	<div class="urma-info-box">
+		<h3><?php esc_html_e( 'How it Works', 'secure-media-vault' ); ?></h3>
 		<ol>
-			<li><?php esc_html_e( 'Set protection rules per file in the Media Library (edit any attachment).', 'guardify-private-media' ); ?></li>
-			<li><?php esc_html_e( 'WordPress rewrites media URLs to secure token-based URLs.', 'guardify-private-media' ); ?></li>
-			<li><?php esc_html_e( 'Tokens are HMAC-signed and expire after the configured duration.', 'guardify-private-media' ); ?></li>
-			<li><?php esc_html_e( 'Access is validated on every request before the file is served.', 'guardify-private-media' ); ?></li>
+			<li><?php esc_html_e( 'Set protection rules per file in the Media Library (edit any attachment).', 'secure-media-vault' ); ?></li>
+			<li><?php esc_html_e( 'WordPress rewrites media URLs to secure token-based URLs.', 'secure-media-vault' ); ?></li>
+			<li><?php esc_html_e( 'Tokens are HMAC-signed and expire after the configured duration.', 'secure-media-vault' ); ?></li>
+			<li><?php esc_html_e( 'Access is validated on every request before the file is served.', 'secure-media-vault' ); ?></li>
 		</ol>
 	</div>
 </div>

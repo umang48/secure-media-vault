@@ -1,7 +1,7 @@
 /**
- * Guardify Private Media – Admin JavaScript
+ * Umang Restricted Media Access – Admin JavaScript
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -17,11 +17,11 @@
 	 */
 	function toggleFields( $select ) {
 		var val        = $select.val();
-		var $container = $select.closest( '.gpm-attachment-fields' );
+		var $container = $select.closest( '.urma-attachment-fields' );
 
-		$container.find( '.gpm-field-roles'    ).toggle( val === 'roles' );
-		$container.find( '.gpm-field-password' ).toggle( val === 'password' );
-		$container.find( '.gpm-field-posts'    ).toggle( val === 'posts' );
+		$container.find( '.urma-field-roles'    ).toggle( val === 'roles' );
+		$container.find( '.urma-field-password' ).toggle( val === 'password' );
+		$container.find( '.urma-field-posts'    ).toggle( val === 'posts' );
 	}
 
 	/**
@@ -37,7 +37,7 @@
 		$btn.text( smv.i18n.generating ).prop( 'disabled', true );
 
 		$.post( smv.ajaxUrl, {
-			action        : 'gpm_get_secure_url',
+			action        : 'urma_get_secure_url',
 			nonce         : smv.nonce,
 			attachment_id : attachmentId,
 		} )
@@ -113,7 +113,7 @@
 		$btn.prop( 'disabled', true );
 
 		$.post( smv.ajaxUrl, {
-			action        : 'gpm_revoke_tokens',
+			action        : 'urma_revoke_tokens',
 			nonce         : smv.nonce,
 			attachment_id : attachmentId,
 		} )
@@ -142,27 +142,27 @@
 	$( function () {
 
 		// Initial field visibility.
-		$( '.gpm-protection-select' ).each( function () {
+		$( '.urma-protection-select' ).each( function () {
 			toggleFields( $( this ) );
 		} );
 
 		// Toggle on change.
-		$( document ).on( 'change', '.gpm-protection-select', function () {
+		$( document ).on( 'change', '.urma-protection-select', function () {
 			toggleFields( $( this ) );
 		} );
 
 		// Generate secure URL.
-		$( document ).on( 'click', '.gpm-generate-url', function () {
+		$( document ).on( 'click', '.urma-generate-url', function () {
 			generateSecureUrl( $( this ) );
 		} );
 
 		// Copy URL.
-		$( document ).on( 'click', '.gpm-copy-url', function () {
+		$( document ).on( 'click', '.urma-copy-url', function () {
 			copyUrl( $( this ) );
 		} );
 
 		// Revoke tokens.
-		$( document ).on( 'click', '.gpm-revoke-tokens', function () {
+		$( document ).on( 'click', '.urma-revoke-tokens', function () {
 			revokeTokens( $( this ) );
 		} );
 

@@ -4,7 +4,7 @@
  *
  * Rendered inside the Media Library attachment edit screen.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @var WP_Post $post         Attachment post.
  * @var string  $type         Current protection type.
  * @var array   $allowed_roles Currently allowed roles.
@@ -16,118 +16,118 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$protection_options = array(
-	GPM_Access_Control::TYPE_PUBLIC    => __( 'Public (WordPress default)', 'guardify-private-media' ),
-	GPM_Access_Control::TYPE_LOGGED_IN => __( 'Logged-in users only', 'guardify-private-media' ),
-	GPM_Access_Control::TYPE_ROLES     => __( 'Specific user roles', 'guardify-private-media' ),
-	GPM_Access_Control::TYPE_PASSWORD  => __( 'Password protected', 'guardify-private-media' ),
-	GPM_Access_Control::TYPE_POSTS     => __( 'Restrict to specific posts/pages', 'guardify-private-media' ),
+$urma_protection_options = array(
+	URMA_Access_Control::TYPE_PUBLIC    => __( 'Public (WordPress default)', 'secure-media-vault' ),
+	URMA_Access_Control::TYPE_LOGGED_IN => __( 'Logged-in users only', 'secure-media-vault' ),
+	URMA_Access_Control::TYPE_ROLES     => __( 'Specific user roles', 'secure-media-vault' ),
+	URMA_Access_Control::TYPE_PASSWORD  => __( 'Password protected', 'secure-media-vault' ),
+	URMA_Access_Control::TYPE_POSTS     => __( 'Restrict to specific posts/pages', 'secure-media-vault' ),
 );
 ?>
-<div class="gpm-attachment-fields" id="gpm-attachment-<?php echo esc_attr( $post->ID ); ?>">
+<div class="urma-attachment-fields" id="urma-attachment-<?php echo esc_attr( $post->ID ); ?>">
 
 	<p>
-		<label for="gpm-protection-type-<?php echo esc_attr( $post->ID ); ?>">
-			<strong><?php esc_html_e( 'Access Type:', 'guardify-private-media' ); ?></strong>
+		<label for="urma-protection-type-<?php echo esc_attr( $post->ID ); ?>">
+			<strong><?php esc_html_e( 'Access Type:', 'secure-media-vault' ); ?></strong>
 		</label><br>
 		<select
-			name="attachments[<?php echo esc_attr( $post->ID ); ?>][gpm_protection_type]"
-			id="gpm-protection-type-<?php echo esc_attr( $post->ID ); ?>"
-			class="gpm-protection-select"
+			name="attachments[<?php echo esc_attr( $post->ID ); ?>][urma_protection_type]"
+			id="urma-protection-type-<?php echo esc_attr( $post->ID ); ?>"
+			class="urma-protection-select"
 			data-attachment-id="<?php echo esc_attr( $post->ID ); ?>"
 		>
-			<?php foreach ( $protection_options as $value => $label ) : ?>
-				<option value="<?php echo esc_attr( $value ); ?>"<?php selected( $type, $value ); ?>>
-					<?php echo esc_html( $label ); ?>
+			<?php foreach ( $urma_protection_options as $urma_value => $urma_label ) : ?>
+				<option value="<?php echo esc_attr( $urma_value ); ?>"<?php selected( $type, $urma_value ); ?>>
+					<?php echo esc_html( $urma_label ); ?>
 				</option>
 			<?php endforeach; ?>
 		</select>
 	</p>
 
 	<!-- Roles sub-field -->
-	<div class="gpm-field-roles" style="display:<?php echo GPM_Access_Control::TYPE_ROLES === $type ? 'block' : 'none'; ?>">
-		<label><strong><?php esc_html_e( 'Allowed Roles:', 'guardify-private-media' ); ?></strong></label><br>
-		<?php foreach ( $all_roles as $role_slug => $role_name ) : ?>
+	<div class="urma-field-roles" style="display:<?php echo URMA_Access_Control::TYPE_ROLES === $type ? 'block' : 'none'; ?>">
+		<label><strong><?php esc_html_e( 'Allowed Roles:', 'secure-media-vault' ); ?></strong></label><br>
+		<?php foreach ( $all_roles as $urma_role_slug => $urma_role_name ) : ?>
 			<label style="display:inline-block;margin-right:12px;">
 				<input
 					type="checkbox"
-					name="attachments[<?php echo esc_attr( $post->ID ); ?>][gpm_allowed_roles][]"
-					value="<?php echo esc_attr( $role_slug ); ?>"
-					<?php checked( in_array( $role_slug, (array) $allowed_roles, true ) ); ?>
+					name="attachments[<?php echo esc_attr( $post->ID ); ?>][urma_allowed_roles][]"
+					value="<?php echo esc_attr( $urma_role_slug ); ?>"
+					<?php checked( in_array( $urma_role_slug, (array) $allowed_roles, true ) ); ?>
 				>
-				<?php echo esc_html( translate_user_role( $role_name ) ); ?>
+				<?php echo esc_html( translate_user_role( $urma_role_name ) ); ?>
 			</label>
 		<?php endforeach; ?>
 	</div>
 
 	<!-- Password sub-field -->
-	<div class="gpm-field-password" style="display:<?php echo GPM_Access_Control::TYPE_PASSWORD === $type ? 'block' : 'none'; ?>">
-		<label for="gpm-password-<?php echo esc_attr( $post->ID ); ?>">
-			<strong><?php esc_html_e( 'New Password (leave blank to keep current):', 'guardify-private-media' ); ?></strong>
+	<div class="urma-field-password" style="display:<?php echo URMA_Access_Control::TYPE_PASSWORD === $type ? 'block' : 'none'; ?>">
+		<label for="urma-password-<?php echo esc_attr( $post->ID ); ?>">
+			<strong><?php esc_html_e( 'New Password (leave blank to keep current):', 'secure-media-vault' ); ?></strong>
 		</label><br>
 		<input
 			type="password"
-			name="attachments[<?php echo esc_attr( $post->ID ); ?>][gpm_password]"
-			id="gpm-password-<?php echo esc_attr( $post->ID ); ?>"
+			name="attachments[<?php echo esc_attr( $post->ID ); ?>][urma_password]"
+			id="urma-password-<?php echo esc_attr( $post->ID ); ?>"
 			autocomplete="new-password"
 			style="width:100%;"
 		>
 	</div>
 
 	<!-- Post IDs sub-field -->
-	<div class="gpm-field-posts" style="display:<?php echo GPM_Access_Control::TYPE_POSTS === $type ? 'block' : 'none'; ?>">
-		<label for="gpm-post-ids-<?php echo esc_attr( $post->ID ); ?>">
-			<strong><?php esc_html_e( 'Allowed Post/Page IDs (comma-separated):', 'guardify-private-media' ); ?></strong>
+	<div class="urma-field-posts" style="display:<?php echo URMA_Access_Control::TYPE_POSTS === $type ? 'block' : 'none'; ?>">
+		<label for="urma-post-ids-<?php echo esc_attr( $post->ID ); ?>">
+			<strong><?php esc_html_e( 'Allowed Post/Page IDs (comma-separated):', 'secure-media-vault' ); ?></strong>
 		</label><br>
 		<?php
-		$existing_post_ids = '';
-		$protection_data   = GPM_Access_Control::get_instance()->get_protection( $post->ID );
-		if ( ! empty( $protection_data['allowed_post_ids'] ) ) {
-			$ids               = json_decode( $protection_data['allowed_post_ids'], true );
-			$existing_post_ids = is_array( $ids ) ? implode( ', ', $ids ) : '';
+		$urma_existing_post_ids = '';
+		$urma_protection_data   = URMA_Access_Control::get_instance()->get_protection( $post->ID );
+		if ( ! empty( $urma_protection_data['allowed_post_ids'] ) ) {
+			$urma_ids               = json_decode( $urma_protection_data['allowed_post_ids'], true );
+			$urma_existing_post_ids = is_array( $urma_ids ) ? implode( ', ', $urma_ids ) : '';
 		}
 		?>
 		<input
 			type="text"
-			name="attachments[<?php echo esc_attr( $post->ID ); ?>][gpm_allowed_post_ids]"
-			id="gpm-post-ids-<?php echo esc_attr( $post->ID ); ?>"
-			value="<?php echo esc_attr( $existing_post_ids ); ?>"
+			name="attachments[<?php echo esc_attr( $post->ID ); ?>][urma_allowed_post_ids]"
+			id="urma-post-ids-<?php echo esc_attr( $post->ID ); ?>"
+			value="<?php echo esc_attr( $urma_existing_post_ids ); ?>"
 			placeholder="e.g. 42, 100, 205"
 			style="width:100%;"
 		>
 	</div>
 
 	<!-- Secure URL generator -->
-	<?php if ( GPM_Access_Control::get_instance()->is_protected( $post->ID ) ) : ?>
-	<div class="gpm-secure-url-section" style="margin-top:10px;padding-top:10px;border-top:1px solid #ddd;">
-		<strong><?php esc_html_e( 'Secure URL:', 'guardify-private-media' ); ?></strong><br>
+	<?php if ( URMA_Access_Control::get_instance()->is_protected( $post->ID ) ) : ?>
+	<div class="urma-secure-url-section" style="margin-top:10px;padding-top:10px;border-top:1px solid #ddd;">
+		<strong><?php esc_html_e( 'Secure URL:', 'secure-media-vault' ); ?></strong><br>
 		<div style="display:flex;gap:6px;align-items:center;margin-top:4px;">
 			<input
 				type="text"
-				id="gpm-secure-url-<?php echo esc_attr( $post->ID ); ?>"
+				id="urma-secure-url-<?php echo esc_attr( $post->ID ); ?>"
 				readonly
 				value=""
 				style="flex:1;font-size:11px;"
-				placeholder="<?php esc_attr_e( 'Click Generate to create a secure URL', 'guardify-private-media' ); ?>"
+				placeholder="<?php esc_attr_e( 'Click Generate to create a secure URL', 'secure-media-vault' ); ?>"
 			>
 			<button
 				type="button"
-				class="button gpm-generate-url"
+				class="button urma-generate-url"
 				data-attachment-id="<?php echo esc_attr( $post->ID ); ?>"
-				data-target="gpm-secure-url-<?php echo esc_attr( $post->ID ); ?>"
-			><?php esc_html_e( 'Generate', 'guardify-private-media' ); ?></button>
+				data-target="urma-secure-url-<?php echo esc_attr( $post->ID ); ?>"
+			><?php esc_html_e( 'Generate', 'secure-media-vault' ); ?></button>
 			<button
 				type="button"
-				class="button gpm-copy-url"
-				data-target="gpm-secure-url-<?php echo esc_attr( $post->ID ); ?>"
-			><?php esc_html_e( 'Copy', 'guardify-private-media' ); ?></button>
+				class="button urma-copy-url"
+				data-target="urma-secure-url-<?php echo esc_attr( $post->ID ); ?>"
+			><?php esc_html_e( 'Copy', 'secure-media-vault' ); ?></button>
 		</div>
 		<button
 			type="button"
-			class="button-link gpm-revoke-tokens"
+			class="button-link urma-revoke-tokens"
 			data-attachment-id="<?php echo esc_attr( $post->ID ); ?>"
 			style="color:#d63638;margin-top:4px;font-size:11px;"
-		><?php esc_html_e( 'Revoke all tokens for this file', 'guardify-private-media' ); ?></button>
+		><?php esc_html_e( 'Revoke all tokens for this file', 'secure-media-vault' ); ?></button>
 	</div>
 	<?php endif; ?>
 </div>

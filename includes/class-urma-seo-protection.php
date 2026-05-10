@@ -3,9 +3,9 @@
  * SEO Protection.
  *
  * Adds X-Robots-Tag headers, disables attachment page indexing,
- * and modifies robots.txt for protected media.
+ * and modifies robots.txt for restricted media.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -15,21 +15,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class GPM_SEO_Protection
+ * Class URMA_SEO_Protection
  */
-class GPM_SEO_Protection {
+class URMA_SEO_Protection {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var GPM_SEO_Protection
+	 * @var URMA_SEO_Protection
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return GPM_SEO_Protection
+	 * @return URMA_SEO_Protection
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -48,16 +48,16 @@ class GPM_SEO_Protection {
 	}
 
 	/**
-	 * Add X-Robots-Tag headers to protected-media requests.
+	 * Add X-Robots-Tag headers to restricted-media requests.
 	 *
 	 * @return void
 	 */
 	public function add_seo_headers() {
-		if ( ! get_option( 'gpm_seo_noindex', true ) ) {
+		if ( ! get_option( 'urma_seo_noindex', true ) ) {
 			return;
 		}
 
-		$file_id = get_query_var( 'gpm_file_id' );
+		$file_id = get_query_var( 'urma_file_id' );
 		if ( ! empty( $file_id ) ) {
 			header( 'X-Robots-Tag: noindex, nofollow', true );
 		}
@@ -69,17 +69,17 @@ class GPM_SEO_Protection {
 	 * @return void
 	 */
 	public function add_robots_txt_rules() {
-		if ( ! get_option( 'gpm_robots_txt', false ) ) {
+		if ( ! get_option( 'urma_robots_txt', false ) ) {
 			return;
 		}
 
 		$upload_dir    = wp_upload_dir();
 		$uploads_path  = wp_parse_url( $upload_dir['baseurl'], PHP_URL_PATH );
 
-		echo "\n# Guardify Private Media\n";
+		echo "\n# Restricted Media Access\n";
 		echo 'User-agent: *' . "\n";
 		echo 'Disallow: ' . esc_url( $uploads_path ) . '/' . "\n";
-		echo 'Disallow: /protected-media/' . "\n";
+		echo 'Disallow: /restricted-media/' . "\n";
 	}
 
 	/**
@@ -89,7 +89,7 @@ class GPM_SEO_Protection {
 	 * @return array
 	 */
 	public function noindex_attachment_pages( $robots ) {
-		if ( is_attachment() && get_option( 'gpm_seo_noindex', true ) ) {
+		if ( is_attachment() && get_option( 'urma_seo_noindex', true ) ) {
 			$robots['noindex']  = true;
 			$robots['nofollow'] = true;
 		}

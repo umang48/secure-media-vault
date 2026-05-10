@@ -5,7 +5,7 @@
  * Handles activation tasks: creating database tables, default options,
  * and writing .htaccess protection rules.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class GPM_Activator
+ * Class URMA_Activator
  */
-class GPM_Activator {
+class URMA_Activator {
 
 	/**
 	 * Plugin activation routine.
@@ -28,7 +28,7 @@ class GPM_Activator {
 		self::create_tables();
 		self::set_default_options();
 		self::add_rewrite_rules();
-		GPM_Htaccess_Manager::write_rules( true );
+		URMA_Htaccess_Manager::write_rules( true );
 		flush_rewrite_rules();
 	}
 
@@ -43,7 +43,7 @@ class GPM_Activator {
 		$charset_collate = $wpdb->get_charset_collate();
 
 		// Table for per-attachment protection settings.
-		$table_protection = $wpdb->prefix . 'gpm_protection';
+		$table_protection = $wpdb->prefix . 'urma_protection';
 		$sql_protection    = "CREATE TABLE {$table_protection} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			attachment_id BIGINT(20) UNSIGNED NOT NULL,
@@ -59,7 +59,7 @@ class GPM_Activator {
 		) {$charset_collate};";
 
 		// Table for signed token records.
-		$table_tokens = $wpdb->prefix . 'gpm_tokens';
+		$table_tokens = $wpdb->prefix . 'urma_tokens';
 		$sql_tokens   = "CREATE TABLE {$table_tokens} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			token VARCHAR(64) NOT NULL,
@@ -75,7 +75,7 @@ class GPM_Activator {
 		) {$charset_collate};";
 
 		// Table for access log.
-		$table_logs = $wpdb->prefix . 'gpm_access_logs';
+		$table_logs = $wpdb->prefix . 'urma_access_logs';
 		$sql_logs   = "CREATE TABLE {$table_logs} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			attachment_id BIGINT(20) UNSIGNED NOT NULL,
@@ -94,7 +94,7 @@ class GPM_Activator {
 		dbDelta( $sql_tokens );
 		dbDelta( $sql_logs );
 
-		update_option( 'gpm_db_version', GPM_VERSION );
+		update_option( 'urma_db_version', URMA_VERSION );
 	}
 
 	/**
@@ -104,18 +104,18 @@ class GPM_Activator {
 	 */
 	private static function set_default_options() {
 		$defaults = array(
-			'gpm_default_protection'   => 'public',
-			'gpm_token_expiry'         => 3600,   // 1 hour in seconds.
-			'gpm_hotlink_protection'   => true,
-			'gpm_seo_noindex'          => true,
-			'gpm_disable_attachments'  => true,
-			'gpm_robots_txt'           => false,
-			'gpm_debug_mode'           => false,
-			'gpm_ip_validation'        => false,
-			'gpm_stream_large_files'   => true,
-			'gpm_stream_threshold'     => 10,     // MB threshold for streaming.
-			'gpm_log_access'           => true,
-			'gpm_log_retention_days'   => 30,
+			'urma_default_protection'   => 'public',
+			'urma_token_expiry'         => 3600,   // 1 hour in seconds.
+			'urma_hotlink_protection'   => true,
+			'urma_seo_noindex'          => true,
+			'urma_disable_attachments'  => true,
+			'urma_robots_txt'           => false,
+			'urma_debug_mode'           => false,
+			'urma_ip_validation'        => false,
+			'urma_stream_large_files'   => true,
+			'urma_stream_threshold'     => 10,     // MB threshold for streaming.
+			'urma_log_access'           => true,
+			'urma_log_retention_days'   => 30,
 		);
 
 		foreach ( $defaults as $key => $value ) {
@@ -132,12 +132,12 @@ class GPM_Activator {
 	 */
 	private static function add_rewrite_rules() {
 		add_rewrite_rule(
-			'^protected-media/([0-9]+)/([a-zA-Z0-9_-]+)/?$',
-			'index.php?gpm_file_id=$matches[1]&gpm_token=$matches[2]',
+			'^restricted-media/([0-9]+)/([a-zA-Z0-9_-]+)/?$',
+			'index.php?urma_file_id=$matches[1]&urma_token=$matches[2]',
 			'top'
 		);
-		add_rewrite_tag( '%gpm_file_id%', '([0-9]+)' );
-		add_rewrite_tag( '%gpm_token%', '([a-zA-Z0-9_-]+)' );
+		add_rewrite_tag( '%urma_file_id%', '([0-9]+)' );
+		add_rewrite_tag( '%urma_token%', '([a-zA-Z0-9_-]+)' );
 	}
 
 }

@@ -1,4 +1,4 @@
-=== Guardify Private Media ===
+=== Restricted Media Access ===
 Contributors: umangapps48
 Donate link: https://phptutorialpoints.in/
 Tags: media protection, secure files, file access control, media library, token url
@@ -13,9 +13,9 @@ Protect WordPress media files with token-based secure delivery, fine-grained acc
 
 == Description ==
 
-**Guardify Private Media** gives you full control over who can access your WordPress media files. Stop search engines, bots, and unauthorised visitors from downloading your protected images, PDFs, videos, or documents.
+**Restricted Media Access** gives you full control over who can access your WordPress media files. Stop search engines, bots, and unauthorised visitors from downloading your protected images, PDFs, videos, or documents.
 
-**Author:** [Umang Prajapati](https://phptutorialpoints.in/) | [WordPress Profile](https://profiles.wordpress.org/umangapps48/) | [GitHub](https://github.com/umang48/guardify-private-media)
+**Author:** [Umang Prajapati](https://phptutorialpoints.in/) | [WordPress Profile](https://profiles.wordpress.org/umangapps48/) | [GitHub](https://github.com/umang48/umang-restricted-media-access)
 
 = Core Features =
 
@@ -36,7 +36,7 @@ Set a protection level for every file in the Media Library:
 
 **🔗 Secure File Delivery**
 * Replace original media URLs with HMAC-signed, time-limited token URLs
-* Format: `example.com/protected-media/{file-id}/{token}/`
+* Format: `example.com/restricted-media/{file-id}/{token}/`
 * Configurable token expiry (default: 1 hour)
 * Hotlink protection prevents embedding on external domains
 * Optional IP-address binding for tokens
@@ -73,9 +73,9 @@ The access control system is designed to work alongside WooCommerce. Future vers
 
 == Installation ==
 
-1. Upload the `guardify-private-media` folder to `/wp-content/plugins/`.
+1. Upload the `umang-restricted-media-access` folder to `/wp-content/plugins/`.
 2. Activate the plugin through the **Plugins** screen.
-3. Visit **Media Vault → Settings** to configure your default options.
+3. Visit **Restricted Media Access → Settings** to configure your default options.
 4. Open any media file in the **Media Library** and set its protection level.
 5. If using Nginx, add the server block rules shown in the **Dashboard**.
 6. Re-save your **Permalink Settings** (`Settings → Permalinks`) if secure URLs return 404.

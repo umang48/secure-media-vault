@@ -1,9 +1,9 @@
 # Copyright (C) 2024 Umang Prajapati (https://phptutorialpoints.in/)
-# This file is distributed under the same license as the Secure Media Vault plugin.
+# This file is distributed under the same license as the Secure Restricted Media Access plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Secure Media Vault 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/umang48/secure-media-vault/issues\n"
+"Project-Id-Version: Secure Restricted Media Access 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/umang48/umang-restricted-media-access/issues\n"
 "POT-Creation-Date: 2024-01-01T00:00:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,14 +14,14 @@ msgstr ""
 "Language: \n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "X-Generator: WP-CLI 2.9.0\n"
-"X-Domain: secure-media-vault\n"
+"X-Domain: umang-restricted-media-access\n"
 
 #. Plugin Name of the plugin
-msgid "Secure Media Vault"
+msgid "Secure Restricted Media Access"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://wordpress.org/plugins/secure-media-vault/"
+msgid "https://wordpress.org/plugins/umang-restricted-media-access/"
 msgstr ""
 
 #. Description of the plugin
@@ -29,7 +29,7 @@ msgid "Protect WordPress media files from direct public access with token-based 
 msgstr ""
 
 #. Author of the plugin
-msgid "Secure Media Vault Contributors"
+msgid "Secure Restricted Media Access Contributors"
 msgstr ""
 
 #: includes/class-smv-activator.php
@@ -73,11 +73,11 @@ msgid "Access File"
 msgstr ""
 
 #: admin/class-smv-admin.php:52
-msgid "Secure Media Vault"
+msgid "Secure Restricted Media Access"
 msgstr ""
 
 #: admin/class-smv-admin.php:53
-msgid "Media Vault"
+msgid "Restricted Media Access"
 msgstr ""
 
 #: admin/class-smv-admin.php:59
@@ -96,7 +96,7 @@ msgid "Access Logs"
 msgstr ""
 
 #: admin/class-smv-admin.php:139
-msgid "Secure Media Vault: Permalink settings may need to be re-saved. %1$sGo to Permalinks Settings%2$s."
+msgid "Secure Restricted Media Access: Permalink settings may need to be re-saved. %1$sGo to Permalinks Settings%2$s."
 msgstr ""
 
 #: admin/class-smv-admin.php:217
@@ -125,7 +125,7 @@ msgid "SMV: Make Public"
 msgstr ""
 
 #: admin/class-smv-media-library.php:211
-msgid "Secure Media Vault: %d file(s) protection settings updated."
+msgid "Secure Restricted Media Access: %d file(s) protection settings updated."
 msgstr ""
 
 #: admin/class-smv-media-library.php:220

@@ -3,10 +3,10 @@
  * Rewrite Rules.
  *
  * Registers custom WordPress rewrite rules and query vars for the
- * protected-media endpoint. Also disables media attachment pages
+ * restricted-media endpoint. Also disables media attachment pages
  * when configured.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -16,21 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class GPM_Rewrite_Rules
+ * Class URMA_Rewrite_Rules
  */
-class GPM_Rewrite_Rules {
+class URMA_Rewrite_Rules {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var GPM_Rewrite_Rules
+	 * @var URMA_Rewrite_Rules
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return GPM_Rewrite_Rules
+	 * @return URMA_Rewrite_Rules
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -57,14 +57,14 @@ class GPM_Rewrite_Rules {
 	public function add_rewrite_rules() {
 		// Secure file delivery endpoint.
 		add_rewrite_rule(
-			'^protected-media/([0-9]+)/([a-zA-Z0-9_-]+)/?$',
-			'index.php?gpm_file_id=$matches[1]&gpm_token=$matches[2]',
+			'^restricted-media/([0-9]+)/([a-zA-Z0-9_-]+)/?$',
+			'index.php?urma_file_id=$matches[1]&urma_token=$matches[2]',
 			'top'
 		);
 		// Diagnostic endpoint: handles redirects from .htaccess for blocked direct access.
 		add_rewrite_rule(
-			'^protected-media-check/?$',
-			'index.php?gpm_direct=1',
+			'^restricted-media-check/?$',
+			'index.php?urma_direct=1',
 			'top'
 		);
 	}
@@ -76,15 +76,15 @@ class GPM_Rewrite_Rules {
 	 * @return array Modified query vars.
 	 */
 	public function add_query_vars( $vars ) {
-		$vars[] = 'gpm_file_id';
-		$vars[] = 'gpm_token';
-		$vars[] = 'gpm_direct';
+		$vars[] = 'urma_file_id';
+		$vars[] = 'urma_token';
+		$vars[] = 'urma_direct';
 		$vars[] = 'file';
 		return $vars;
 	}
 
 	/**
-	 * Handle the /protected-media-check/ diagnostic endpoint.
+	 * Handle the /restricted-media-check/ diagnostic endpoint.
 	 *
 	 * When .htaccess redirects a direct file request here, this method:
 	 * - Resolves the attachment from the requested file URI.
@@ -96,10 +96,10 @@ class GPM_Rewrite_Rules {
 	 * @return void
 	 */
 	public function handle_direct_access_check() {
-		// Only fire on requests that carry ?gpm_direct=1.
-		if ( '1' !== get_query_var( 'gpm_direct' ) ) {
+		// Only fire on requests that carry ?urma_direct=1.
+		if ( '1' !== get_query_var( 'urma_direct' ) ) {
 			// Also support plain $_GET for non-rewrite requests.
-			if ( empty( $_GET['gpm_direct'] ) || '1' !== $_GET['gpm_direct'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			if ( empty( $_GET['urma_direct'] ) || '1' !== $_GET['urma_direct'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				return;
 			}
 		}
@@ -134,7 +134,7 @@ class GPM_Rewrite_Rules {
 		}
 
 		// Check protection status.
-		$access_control = GPM_Access_Control::get_instance();
+		$access_control = URMA_Access_Control::get_instance();
 		$is_protected   = $attachment_id ? $access_control->is_protected( $attachment_id ) : false;
 
 		if ( ! $is_protected ) {
@@ -155,7 +155,7 @@ class GPM_Rewrite_Rules {
 			}
 
 			// File not found on disk.
-			wp_die( esc_html__( 'File not found.', 'guardify-private-media' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'File not found.', 'secure-media-vault' ), '', array( 'response' => 404 ) );
 		}
 
 		// Protected file — inform the client.
@@ -164,7 +164,7 @@ class GPM_Rewrite_Rules {
 				'smv'       => true,
 				'protected' => true,
 				'file'      => $file_uri,
-				'message'   => __( 'Direct access is blocked. Use the secure URL to access this file.', 'guardify-private-media' ),
+				'message'   => __( 'Direct access is blocked. Use the secure URL to access this file.', 'secure-media-vault' ),
 			),
 			403
 		);
@@ -176,7 +176,7 @@ class GPM_Rewrite_Rules {
 	 * @return void
 	 */
 	public function disable_attachment_pages() {
-		if ( ! get_option( 'gpm_disable_attachments', true ) ) {
+		if ( ! get_option( 'urma_disable_attachments', true ) ) {
 			return;
 		}
 

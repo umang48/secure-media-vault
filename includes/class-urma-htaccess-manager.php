@@ -2,10 +2,10 @@
 /**
  * .htaccess Manager.
  *
- * Utility class to write, update, and remove Guardify Private Media protection
+ * Utility class to write, update, and remove Restricted Media Access protection
  * rules from the uploads directory .htaccess file.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -15,23 +15,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class GPM_Htaccess_Manager
+ * Class URMA_Htaccess_Manager
  */
-class GPM_Htaccess_Manager {
+class URMA_Htaccess_Manager {
 
 	/**
 	 * Marker for the SMV block begin.
 	 *
 	 * @var string
 	 */
-	const MARKER_BEGIN = '# BEGIN Guardify Private Media';
+	const MARKER_BEGIN = '# BEGIN Restricted Media Access';
 
 	/**
 	 * Marker for the SMV block end.
 	 *
 	 * @var string
 	 */
-	const MARKER_END = '# END Guardify Private Media';
+	const MARKER_END = '# END Restricted Media Access';
 
 	/**
 	 * Write or update the SMV rules in the uploads .htaccess.
@@ -119,11 +119,11 @@ class GPM_Htaccess_Manager {
 		$upload_dir  = wp_upload_dir();
 		$upload_path = rtrim( wp_parse_url( $upload_dir['baseurl'], PHP_URL_PATH ), '/' );
 
-		return "# Guardify Private Media – Nginx Rules\n"
+		return "# Restricted Media Access – Nginx Rules\n"
 			. "# Add these rules inside your server {} block:\n\n"
 			. "location ~* ^{$upload_path}/(.+)$ {\n"
 			. "    deny all;\n"
-			. "    return 302 /protected-media-check/?gpm_direct=1&file=\$1;\n"
+			. "    return 302 /restricted-media-check/?urma_direct=1&file=\$1;\n"
 			. "}\n\n"
 			. "# Disable directory listing\n"
 			. "autoindex off;\n";

@@ -2,11 +2,11 @@
 /**
  * File Handler.
  *
- * Intercepts protected-media requests routed through WordPress rewrite rules,
+ * Intercepts restricted-media requests routed through WordPress rewrite rules,
  * validates access tokens, streams the file securely, and adds X-Robots-Tag
  * headers. Supports chunked streaming for large files.
  *
- * @package SecureMediaVault
+ * @package UmangRestrictedMediaAccess
  * @since   1.0.0
  */
 
@@ -16,21 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class GPM_File_Handler
+ * Class URMA_File_Handler
  */
-class GPM_File_Handler {
+class URMA_File_Handler {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var GPM_File_Handler
+	 * @var URMA_File_Handler
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return GPM_File_Handler
+	 * @return URMA_File_Handler
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -53,8 +53,8 @@ class GPM_File_Handler {
 	 * @return void
 	 */
 	public function handle_secure_request() {
-		$file_id = get_query_var( 'gpm_file_id' );
-		$token   = get_query_var( 'gpm_token' );
+		$file_id = get_query_var( 'urma_file_id' );
+		$token   = get_query_var( 'urma_token' );
 
 		if ( empty( $file_id ) || empty( $token ) ) {
 			return;
@@ -67,18 +67,18 @@ class GPM_File_Handler {
 		$this->log_access( $attachment_id, 'attempt' );
 
 		// Validate token.
-		$token_manager = GPM_Token_Manager::get_instance();
+		$token_manager = URMA_Token_Manager::get_instance();
 		$ip            = $token_manager->get_client_ip();
 
 		if ( ! $token_manager->validate_token( $token, $attachment_id, $ip ) ) {
 			$this->log_access( $attachment_id, 'denied_invalid_token' );
-			$this->deny_access( __( 'Invalid or expired access token.', 'guardify-private-media' ) );
+			$this->deny_access( __( 'Invalid or expired access token.', 'secure-media-vault' ) );
 			return;
 		}
 
 		// Check access control rules.
-		$password      = isset( $_POST['gpm_password'] ) ? sanitize_text_field( wp_unslash( $_POST['gpm_password'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$access_control = GPM_Access_Control::get_instance();
+		$password      = isset( $_POST['urma_password'] ) ? sanitize_text_field( wp_unslash( $_POST['urma_password'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$access_control = URMA_Access_Control::get_instance();
 
 		if ( ! $access_control->is_access_allowed( $attachment_id, $password ) ) {
 			$protection = $access_control->get_protection( $attachment_id );
@@ -87,15 +87,15 @@ class GPM_File_Handler {
 				return;
 			}
 			$this->log_access( $attachment_id, 'denied_access_control' );
-			$this->deny_access( __( 'You do not have permission to access this file.', 'guardify-private-media' ) );
+			$this->deny_access( __( 'You do not have permission to access this file.', 'secure-media-vault' ) );
 			return;
 		}
 
 		// Check hotlink protection.
-		if ( get_option( 'gpm_hotlink_protection', true ) ) {
+		if ( get_option( 'urma_hotlink_protection', true ) ) {
 			if ( $this->is_hotlink() ) {
 				$this->log_access( $attachment_id, 'denied_hotlink' );
-				$this->deny_access( __( 'Hotlinking is not allowed.', 'guardify-private-media' ) );
+				$this->deny_access( __( 'Hotlinking is not allowed.', 'secure-media-vault' ) );
 				return;
 			}
 		}
@@ -104,7 +104,7 @@ class GPM_File_Handler {
 		$file_path = get_attached_file( $attachment_id );
 		if ( ! $file_path || ! file_exists( $file_path ) ) {
 			$this->log_access( $attachment_id, 'denied_file_not_found' );
-			wp_die( esc_html__( 'File not found.', 'guardify-private-media' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'File not found.', 'secure-media-vault' ), '', array( 'response' => 404 ) );
 			return;
 		}
 
@@ -140,8 +140,8 @@ class GPM_File_Handler {
 		header( 'Content-Type: ' . $mime_type );
 		header( 'Content-Disposition: inline; filename="' . esc_attr( $file_name ) . '"' );
 
-		$stream_threshold_mb = absint( get_option( 'gpm_stream_threshold', 10 ) );
-		$use_streaming       = get_option( 'gpm_stream_large_files', true );
+		$stream_threshold_mb = absint( get_option( 'urma_stream_threshold', 10 ) );
+		$use_streaming       = get_option( 'urma_stream_large_files', true );
 
 		if ( $use_streaming && $file_size > $stream_threshold_mb * 1024 * 1024 ) {
 			$this->stream_file( $file_path, $file_size );
@@ -185,7 +185,7 @@ class GPM_File_Handler {
 		$fp         = fopen( $file_path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
 		if ( ! $fp ) {
-			wp_die( esc_html__( 'Unable to read file.', 'guardify-private-media' ), '', array( 'response' => 500 ) );
+			wp_die( esc_html__( 'Unable to read file.', 'secure-media-vault' ), '', array( 'response' => 500 ) );
 		}
 
 		fseek( $fp, $start );
@@ -212,13 +212,13 @@ class GPM_File_Handler {
 	 * @return string
 	 */
 	public function maybe_replace_url( $url, $attachment_id ) {
-		if ( ! GPM_Access_Control::get_instance()->is_protected( $attachment_id ) ) {
+		if ( ! URMA_Access_Control::get_instance()->is_protected( $attachment_id ) ) {
 			return $url;
 		}
 
 		$user_id = is_user_logged_in() ? get_current_user_id() : null;
 
-		return GPM_Token_Manager::get_instance()->get_secure_url( $attachment_id, $user_id );
+		return URMA_Token_Manager::get_instance()->get_secure_url( $attachment_id, $user_id );
 	}
 
 	/**
@@ -248,7 +248,7 @@ class GPM_File_Handler {
 	private function deny_access( $message ) {
 		wp_die(
 			esc_html( $message ),
-			esc_html__( 'Access Denied', 'guardify-private-media' ),
+			esc_html__( 'Access Denied', 'secure-media-vault' ),
 			array( 'response' => 403 )
 		);
 	}
@@ -261,27 +261,27 @@ class GPM_File_Handler {
 	 * @return void
 	 */
 	private function serve_password_form( $attachment_id, $token ) {
-		$action_url = home_url( "/protected-media/{$attachment_id}/{$token}/" );
+		$action_url = home_url( "/restricted-media/{$attachment_id}/{$token}/" );
 		?>
 		<!DOCTYPE html>
 		<html lang="<?php echo esc_attr( get_bloginfo( 'language' ) ); ?>">
 		<head>
 			<meta charset="UTF-8">
 			<meta name="robots" content="noindex, nofollow">
-			<title><?php esc_html_e( 'Protected File – Enter Password', 'guardify-private-media' ); ?></title>
+			<title><?php esc_html_e( 'Protected File – Enter Password', 'secure-media-vault' ); ?></title>
 			<?php
-			wp_enqueue_style( 'gpm-password-form', GPM_PLUGIN_URL . 'assets/css/password-form.css', array(), GPM_VERSION );
-			wp_print_styles( 'gpm-password-form' );
+			wp_enqueue_style( 'urma-password-form', URMA_PLUGIN_URL . 'assets/css/password-form.css', array(), URMA_VERSION );
+			wp_print_styles( 'urma-password-form' );
 			?>
 		</head>
 		<body>
-		<div class="gpm-form">
-			<h2><?php esc_html_e( 'This file is password protected', 'guardify-private-media' ); ?></h2>
+		<div class="urma-form">
+			<h2><?php esc_html_e( 'This file is password protected', 'secure-media-vault' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( $action_url ); ?>">
-				<?php wp_nonce_field( 'gpm_password_access_' . $attachment_id, 'gpm_nonce' ); ?>
-				<label for="gpm_password"><?php esc_html_e( 'Enter password to access this file:', 'guardify-private-media' ); ?></label>
-				<input type="password" id="gpm_password" name="gpm_password" required autocomplete="current-password">
-				<button type="submit"><?php esc_html_e( 'Access File', 'guardify-private-media' ); ?></button>
+				<?php wp_nonce_field( 'urma_password_access_' . $attachment_id, 'urma_nonce' ); ?>
+				<label for="urma_password"><?php esc_html_e( 'Enter password to access this file:', 'secure-media-vault' ); ?></label>
+				<input type="password" id="urma_password" name="urma_password" required autocomplete="current-password">
+				<button type="submit"><?php esc_html_e( 'Access File', 'secure-media-vault' ); ?></button>
 			</form>
 		</div>
 		</body>
@@ -298,14 +298,14 @@ class GPM_File_Handler {
 	 * @return void
 	 */
 	private function log_access( $attachment_id, $status ) {
-		if ( ! get_option( 'gpm_log_access', true ) ) {
+		if ( ! get_option( 'urma_log_access', true ) ) {
 			return;
 		}
 
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'gpm_access_logs';
-		$ip    = GPM_Token_Manager::get_instance()->get_client_ip();
+		$table = $wpdb->prefix . 'urma_access_logs';
+		$ip    = URMA_Token_Manager::get_instance()->get_client_ip();
 
 		$wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$table,
