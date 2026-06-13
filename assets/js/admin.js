@@ -1,7 +1,7 @@
 /**
- * Umang Restricted Media Access – Admin JavaScript
+ * PTP Private Media – Admin JavaScript
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 

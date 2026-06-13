@@ -4,7 +4,7 @@
  *
  * Registers admin menus, enqueues admin assets, and handles plugin action links.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -56,37 +56,37 @@ class URMA_Admin {
 	 */
 	public function register_menus() {
 		add_menu_page(
-			__( 'Restricted Media Access', 'secure-media-vault' ),
-			__( 'Restricted Media Access', 'secure-media-vault' ),
+			__( 'PTP Private Media', 'ptp-private-media' ),
+			__( 'PTP Private Media', 'ptp-private-media' ),
 			'manage_options',
-			'secure-media-vault',
+			'ptp-private-media',
 			array( $this, 'render_dashboard_page' ),
 			'dashicons-lock',
 			81
 		);
 
 		add_submenu_page(
-			'secure-media-vault',
-			__( 'Dashboard', 'secure-media-vault' ),
-			__( 'Dashboard', 'secure-media-vault' ),
+			'ptp-private-media',
+			__( 'Dashboard', 'ptp-private-media' ),
+			__( 'Dashboard', 'ptp-private-media' ),
 			'manage_options',
-			'secure-media-vault',
+			'ptp-private-media',
 			array( $this, 'render_dashboard_page' )
 		);
 
 		add_submenu_page(
-			'secure-media-vault',
-			__( 'Settings', 'secure-media-vault' ),
-			__( 'Settings', 'secure-media-vault' ),
+			'ptp-private-media',
+			__( 'Settings', 'ptp-private-media' ),
+			__( 'Settings', 'ptp-private-media' ),
 			'manage_options',
 			'urma-settings',
 			array( 'URMA_Settings', 'render_page' )
 		);
 
 		add_submenu_page(
-			'secure-media-vault',
-			__( 'Access Logs', 'secure-media-vault' ),
-			__( 'Access Logs', 'secure-media-vault' ),
+			'ptp-private-media',
+			__( 'Access Logs', 'ptp-private-media' ),
+			__( 'Access Logs', 'ptp-private-media' ),
 			'manage_options',
 			'urma-logs',
 			array( $this, 'render_logs_page' )
@@ -101,9 +101,9 @@ class URMA_Admin {
 	 */
 	public function enqueue_assets( $hook ) {
 		$urma_pages = array(
-			'toplevel_page_umang-restricted-media-access',
-			'umang-restricted-media-access_page_urma-settings',
-			'umang-restricted-media-access_page_urma-logs',
+			'toplevel_page_ptp-private-media',
+			'ptp-private-media_page_urma-settings',
+			'ptp-private-media_page_urma-logs',
 		);
 
 		$is_urma_page       = in_array( $hook, $urma_pages, true );
@@ -136,10 +136,10 @@ class URMA_Admin {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'urma_admin_nonce' ),
 				'i18n'    => array(
-					'confirmRevoke'  => __( 'Revoke all tokens for this file? Existing secure links will stop working.', 'secure-media-vault' ),
-					'tokenCopied'    => __( 'Secure URL copied to clipboard!', 'secure-media-vault' ),
-					'generating'     => __( 'Generating…', 'secure-media-vault' ),
-					'error'          => __( 'An error occurred. Please try again.', 'secure-media-vault' ),
+					'confirmRevoke'  => __( 'Revoke all tokens for this file? Existing secure links will stop working.', 'ptp-private-media' ),
+					'tokenCopied'    => __( 'Secure URL copied to clipboard!', 'ptp-private-media' ),
+					'generating'     => __( 'Generating…', 'ptp-private-media' ),
+					'error'          => __( 'An error occurred. Please try again.', 'ptp-private-media' ),
 				),
 			)
 		);
@@ -155,7 +155,7 @@ class URMA_Admin {
 		$settings_link = sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'admin.php?page=urma-settings' ) ),
-			esc_html__( 'Settings', 'secure-media-vault' )
+			esc_html__( 'Settings', 'ptp-private-media' )
 		);
 		array_unshift( $links, $settings_link );
 		return $links;
@@ -174,7 +174,7 @@ class URMA_Admin {
 					<?php
 					printf(
 						/* translators: 1: Link open tag, 2: Link close tag */
-						esc_html__( 'Restricted Media Access: Permalink settings may need to be re-saved. %1$sGo to Permalinks Settings%2$s.', 'secure-media-vault' ),
+						esc_html__( 'PTP Private Media: Permalink settings may need to be re-saved. %1$sGo to Permalinks Settings%2$s.', 'ptp-private-media' ),
 						'<a href="' . esc_url( admin_url( 'options-permalink.php' ) ) . '">',
 						'</a>'
 					);
@@ -193,7 +193,7 @@ class URMA_Admin {
 	 */
 	public function render_dashboard_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions.', 'secure-media-vault' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions.', 'ptp-private-media' ) );
 		}
 
 		global $wpdb;
@@ -227,7 +227,7 @@ class URMA_Admin {
 	 */
 	public function render_logs_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions.', 'secure-media-vault' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions.', 'ptp-private-media' ) );
 		}
 
 		global $wpdb;
@@ -261,13 +261,13 @@ class URMA_Admin {
 		check_ajax_referer( 'urma_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'secure-media-vault' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'ptp-private-media' ) ) );
 			return;
 		}
 
 		$attachment_id = isset( $_POST['attachment_id'] ) ? absint( $_POST['attachment_id'] ) : 0;
 		if ( ! $attachment_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID.', 'secure-media-vault' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID.', 'ptp-private-media' ) ) );
 			return;
 		}
 
@@ -285,13 +285,13 @@ class URMA_Admin {
 		check_ajax_referer( 'urma_admin_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'upload_files' ) ) {
-			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'secure-media-vault' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Permission denied.', 'ptp-private-media' ) ) );
 			return;
 		}
 
 		$attachment_id = isset( $_POST['attachment_id'] ) ? absint( $_POST['attachment_id'] ) : 0;
 		if ( ! $attachment_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID.', 'secure-media-vault' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid attachment ID.', 'ptp-private-media' ) ) );
 			return;
 		}
 
@@ -300,7 +300,7 @@ class URMA_Admin {
 		wp_send_json_success(
 			array(
 				/* translators: %d: number of revoked tokens */
-				'message' => sprintf( __( '%d token(s) revoked successfully.', 'secure-media-vault' ), $count ),
+				'message' => sprintf( __( '%d token(s) revoked successfully.', 'ptp-private-media' ), $count ),
 			)
 		);
 	}

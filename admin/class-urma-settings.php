@@ -4,7 +4,7 @@
  *
  * Registers all settings sections and fields using the WordPress Settings API.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -61,7 +61,7 @@ class URMA_Settings {
 		$settings = array(
 			'urma_default_protection'   => array(
 				'type'              => 'string',
-				'sanitize_callback' => 'sanitize_text_field',
+				'sanitize_callback' => array( $this, 'sanitize_protection_type' ),
 				'default'           => 'public',
 			),
 			'urma_token_expiry'          => array(
@@ -136,7 +136,7 @@ class URMA_Settings {
 		// Section: General.
 		add_settings_section(
 			'urma_general',
-			__( 'General Settings', 'secure-media-vault' ),
+			__( 'General Settings', 'ptp-private-media' ),
 			'__return_null',
 			self::OPTION_GROUP
 		);
@@ -144,7 +144,7 @@ class URMA_Settings {
 		// Section: Token.
 		add_settings_section(
 			'urma_token',
-			__( 'Token & URL Settings', 'secure-media-vault' ),
+			__( 'Token & URL Settings', 'ptp-private-media' ),
 			'__return_null',
 			self::OPTION_GROUP
 		);
@@ -152,7 +152,7 @@ class URMA_Settings {
 		// Section: SEO.
 		add_settings_section(
 			'urma_seo',
-			__( 'SEO & Indexing Protection', 'secure-media-vault' ),
+			__( 'SEO & Indexing Protection', 'ptp-private-media' ),
 			'__return_null',
 			self::OPTION_GROUP
 		);
@@ -160,7 +160,7 @@ class URMA_Settings {
 		// Section: Performance.
 		add_settings_section(
 			'urma_performance',
-			__( 'Performance', 'secure-media-vault' ),
+			__( 'Performance', 'ptp-private-media' ),
 			'__return_null',
 			self::OPTION_GROUP
 		);
@@ -168,7 +168,7 @@ class URMA_Settings {
 		// Section: Logs.
 		add_settings_section(
 			'urma_logs',
-			__( 'Access Logging', 'secure-media-vault' ),
+			__( 'Access Logging', 'ptp-private-media' ),
 			'__return_null',
 			self::OPTION_GROUP
 		);
@@ -187,33 +187,33 @@ class URMA_Settings {
 			// General.
 			array(
 				'id'       => 'urma_default_protection',
-				'title'    => __( 'Default Protection', 'secure-media-vault' ),
+				'title'    => __( 'Default Protection', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_default_protection' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_general',
 			),
 			array(
 				'id'       => 'urma_hotlink_protection',
-				'title'    => __( 'Hotlink Protection', 'secure-media-vault' ),
+				'title'    => __( 'Hotlink Protection', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_general',
 				'args'     => array(
 					'option'      => 'urma_hotlink_protection',
-					'description' => __( 'Block files from being embedded on external websites.', 'secure-media-vault' ),
+					'description' => __( 'Block files from being embedded on external websites.', 'ptp-private-media' ),
 				),
 			),
 
 			// Token.
 			array(
 				'id'       => 'urma_token_expiry',
-				'title'    => __( 'Token Expiry (seconds)', 'secure-media-vault' ),
+				'title'    => __( 'Token Expiry (seconds)', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_number_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_token',
 				'args'     => array(
 					'option'      => 'urma_token_expiry',
-					'description' => __( 'How long a generated secure URL remains valid. Default: 3600 (1 hour).', 'secure-media-vault' ),
+					'description' => __( 'How long a generated secure URL remains valid. Default: 3600 (1 hour).', 'ptp-private-media' ),
 					'min'         => 60,
 					'max'         => 86400 * 7,
 					'step'        => 60,
@@ -221,72 +221,72 @@ class URMA_Settings {
 			),
 			array(
 				'id'       => 'urma_ip_validation',
-				'title'    => __( 'IP Validation', 'secure-media-vault' ),
+				'title'    => __( 'IP Validation', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_token',
 				'args'     => array(
 					'option'      => 'urma_ip_validation',
-					'description' => __( 'Bind tokens to the requester\'s IP address (may break behind proxies/CDNs).', 'secure-media-vault' ),
+					'description' => __( 'Bind tokens to the requester\'s IP address (may break behind proxies/CDNs).', 'ptp-private-media' ),
 				),
 			),
 
 			// SEO.
 			array(
 				'id'       => 'urma_seo_noindex',
-				'title'    => __( 'Noindex Protected Files', 'secure-media-vault' ),
+				'title'    => __( 'Noindex Protected Files', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_seo',
 				'args'     => array(
 					'option'      => 'urma_seo_noindex',
-					'description' => __( 'Send X-Robots-Tag: noindex, nofollow for all protected file requests.', 'secure-media-vault' ),
+					'description' => __( 'Send X-Robots-Tag: noindex, nofollow for all protected file requests.', 'ptp-private-media' ),
 				),
 			),
 			array(
 				'id'       => 'urma_disable_attachments',
-				'title'    => __( 'Disable Attachment Pages', 'secure-media-vault' ),
+				'title'    => __( 'Disable Attachment Pages', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_seo',
 				'args'     => array(
 					'option'      => 'urma_disable_attachments',
-					'description' => __( 'Redirect WordPress media attachment pages to the parent post or homepage.', 'secure-media-vault' ),
+					'description' => __( 'Redirect WordPress media attachment pages to the parent post or homepage.', 'ptp-private-media' ),
 				),
 			),
 			array(
 				'id'       => 'urma_robots_txt',
-				'title'    => __( 'Block via robots.txt', 'secure-media-vault' ),
+				'title'    => __( 'Block via robots.txt', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_seo',
 				'args'     => array(
 					'option'      => 'urma_robots_txt',
-					'description' => __( 'Add Disallow rules for the uploads directory in robots.txt.', 'secure-media-vault' ),
+					'description' => __( 'Add Disallow rules for the uploads directory in robots.txt.', 'ptp-private-media' ),
 				),
 			),
 
 			// Performance.
 			array(
 				'id'       => 'urma_stream_large_files',
-				'title'    => __( 'Stream Large Files', 'secure-media-vault' ),
+				'title'    => __( 'Stream Large Files', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_performance',
 				'args'     => array(
 					'option'      => 'urma_stream_large_files',
-					'description' => __( 'Use chunked streaming (with HTTP Range support) for files above the threshold.', 'secure-media-vault' ),
+					'description' => __( 'Use chunked streaming (with HTTP Range support) for files above the threshold.', 'ptp-private-media' ),
 				),
 			),
 			array(
 				'id'       => 'urma_stream_threshold',
-				'title'    => __( 'Streaming Threshold (MB)', 'secure-media-vault' ),
+				'title'    => __( 'Streaming Threshold (MB)', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_number_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_performance',
 				'args'     => array(
 					'option'      => 'urma_stream_threshold',
-					'description' => __( 'Files larger than this will be streamed in chunks.', 'secure-media-vault' ),
+					'description' => __( 'Files larger than this will be streamed in chunks.', 'ptp-private-media' ),
 					'min'         => 1,
 					'max'         => 1000,
 					'step'        => 1,
@@ -296,24 +296,24 @@ class URMA_Settings {
 			// Logs.
 			array(
 				'id'       => 'urma_log_access',
-				'title'    => __( 'Enable Access Logging', 'secure-media-vault' ),
+				'title'    => __( 'Enable Access Logging', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_logs',
 				'args'     => array(
 					'option'      => 'urma_log_access',
-					'description' => __( 'Log all file access attempts (granted and denied).', 'secure-media-vault' ),
+					'description' => __( 'Log all file access attempts (granted and denied).', 'ptp-private-media' ),
 				),
 			),
 			array(
 				'id'       => 'urma_log_retention_days',
-				'title'    => __( 'Log Retention (days)', 'secure-media-vault' ),
+				'title'    => __( 'Log Retention (days)', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_number_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_logs',
 				'args'     => array(
 					'option'      => 'urma_log_retention_days',
-					'description' => __( 'Automatically delete access log entries older than this many days.', 'secure-media-vault' ),
+					'description' => __( 'Automatically delete access log entries older than this many days.', 'ptp-private-media' ),
 					'min'         => 1,
 					'max'         => 365,
 					'step'        => 1,
@@ -323,13 +323,13 @@ class URMA_Settings {
 			// Debug (in general section).
 			array(
 				'id'       => 'urma_debug_mode',
-				'title'    => __( 'Debug Mode', 'secure-media-vault' ),
+				'title'    => __( 'Debug Mode', 'ptp-private-media' ),
 				'callback' => array( $this, 'render_checkbox_field' ),
 				'page'     => self::OPTION_GROUP,
 				'section'  => 'urma_general',
 				'args'     => array(
 					'option'      => 'urma_debug_mode',
-					'description' => __( 'Log debug information. Disable on production sites.', 'secure-media-vault' ),
+					'description' => __( 'Log debug information. Disable on production sites.', 'ptp-private-media' ),
 				),
 			),
 		);
@@ -353,7 +353,7 @@ class URMA_Settings {
 	 */
 	public static function render_page() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have sufficient permissions.', 'secure-media-vault' ) );
+			wp_die( esc_html__( 'You do not have sufficient permissions.', 'ptp-private-media' ) );
 		}
 		include URMA_PLUGIN_DIR . 'admin/views/settings.php';
 	}
@@ -366,8 +366,8 @@ class URMA_Settings {
 	public function render_default_protection() {
 		$value   = get_option( 'urma_default_protection', 'public' );
 		$options = array(
-			'public'    => __( 'Public (WordPress default)', 'secure-media-vault' ),
-			'logged_in' => __( 'Logged-in users only', 'secure-media-vault' ),
+			'public'    => __( 'Public (WordPress default)', 'ptp-private-media' ),
+			'logged_in' => __( 'Logged-in users only', 'ptp-private-media' ),
 		);
 		echo '<select name="urma_default_protection" id="urma_default_protection">';
 		foreach ( $options as $key => $label ) {
@@ -379,7 +379,7 @@ class URMA_Settings {
 			);
 		}
 		echo '</select>';
-		echo '<p class="description">' . esc_html__( 'Default protection type applied to newly uploaded files.', 'secure-media-vault' ) . '</p>';
+		echo '<p class="description">' . esc_html__( 'Default protection type applied to newly uploaded files.', 'ptp-private-media' ) . '</p>';
 	}
 
 	/**
@@ -436,6 +436,17 @@ class URMA_Settings {
 	 */
 	public function sanitize_bool( $value ) {
 		return (bool) $value;
+	}
+
+	/**
+	 * Sanitize protection type to allowed values only.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return string
+	 */
+	public function sanitize_protection_type( $value ) {
+		$allowed = array( 'public', 'logged_in' );
+		return in_array( $value, $allowed, true ) ? $value : 'public';
 	}
 
 	/**

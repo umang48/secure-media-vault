@@ -6,7 +6,7 @@
  * validates access tokens, streams the file securely, and adds X-Robots-Tag
  * headers. Supports chunked streaming for large files.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -72,7 +72,7 @@ class URMA_File_Handler {
 
 		if ( ! $token_manager->validate_token( $token, $attachment_id, $ip ) ) {
 			$this->log_access( $attachment_id, 'denied_invalid_token' );
-			$this->deny_access( __( 'Invalid or expired access token.', 'secure-media-vault' ) );
+			$this->deny_access( __( 'Invalid or expired access token.', 'ptp-private-media' ) );
 			return;
 		}
 
@@ -87,7 +87,7 @@ class URMA_File_Handler {
 				return;
 			}
 			$this->log_access( $attachment_id, 'denied_access_control' );
-			$this->deny_access( __( 'You do not have permission to access this file.', 'secure-media-vault' ) );
+			$this->deny_access( __( 'You do not have permission to access this file.', 'ptp-private-media' ) );
 			return;
 		}
 
@@ -95,7 +95,7 @@ class URMA_File_Handler {
 		if ( get_option( 'urma_hotlink_protection', true ) ) {
 			if ( $this->is_hotlink() ) {
 				$this->log_access( $attachment_id, 'denied_hotlink' );
-				$this->deny_access( __( 'Hotlinking is not allowed.', 'secure-media-vault' ) );
+				$this->deny_access( __( 'Hotlinking is not allowed.', 'ptp-private-media' ) );
 				return;
 			}
 		}
@@ -104,7 +104,7 @@ class URMA_File_Handler {
 		$file_path = get_attached_file( $attachment_id );
 		if ( ! $file_path || ! file_exists( $file_path ) ) {
 			$this->log_access( $attachment_id, 'denied_file_not_found' );
-			wp_die( esc_html__( 'File not found.', 'secure-media-vault' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'File not found.', 'ptp-private-media' ), '', array( 'response' => 404 ) );
 			return;
 		}
 
@@ -185,7 +185,7 @@ class URMA_File_Handler {
 		$fp         = fopen( $file_path, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
 		if ( ! $fp ) {
-			wp_die( esc_html__( 'Unable to read file.', 'secure-media-vault' ), '', array( 'response' => 500 ) );
+			wp_die( esc_html__( 'Unable to read file.', 'ptp-private-media' ), '', array( 'response' => 500 ) );
 		}
 
 		fseek( $fp, $start );
@@ -248,7 +248,7 @@ class URMA_File_Handler {
 	private function deny_access( $message ) {
 		wp_die(
 			esc_html( $message ),
-			esc_html__( 'Access Denied', 'secure-media-vault' ),
+			esc_html__( 'Access Denied', 'ptp-private-media' ),
 			array( 'response' => 403 )
 		);
 	}
@@ -268,7 +268,7 @@ class URMA_File_Handler {
 		<head>
 			<meta charset="UTF-8">
 			<meta name="robots" content="noindex, nofollow">
-			<title><?php esc_html_e( 'Protected File – Enter Password', 'secure-media-vault' ); ?></title>
+			<title><?php esc_html_e( 'Protected File – Enter Password', 'ptp-private-media' ); ?></title>
 			<?php
 			wp_enqueue_style( 'urma-password-form', URMA_PLUGIN_URL . 'assets/css/password-form.css', array(), URMA_VERSION );
 			wp_print_styles( 'urma-password-form' );
@@ -276,12 +276,12 @@ class URMA_File_Handler {
 		</head>
 		<body>
 		<div class="urma-form">
-			<h2><?php esc_html_e( 'This file is password protected', 'secure-media-vault' ); ?></h2>
+			<h2><?php esc_html_e( 'This file is password protected', 'ptp-private-media' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( $action_url ); ?>">
 				<?php wp_nonce_field( 'urma_password_access_' . $attachment_id, 'urma_nonce' ); ?>
-				<label for="urma_password"><?php esc_html_e( 'Enter password to access this file:', 'secure-media-vault' ); ?></label>
+				<label for="urma_password"><?php esc_html_e( 'Enter password to access this file:', 'ptp-private-media' ); ?></label>
 				<input type="password" id="urma_password" name="urma_password" required autocomplete="current-password">
-				<button type="submit"><?php esc_html_e( 'Access File', 'secure-media-vault' ); ?></button>
+				<button type="submit"><?php esc_html_e( 'Access File', 'ptp-private-media' ); ?></button>
 			</form>
 		</div>
 		</body>

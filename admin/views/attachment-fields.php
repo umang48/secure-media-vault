@@ -4,7 +4,7 @@
  *
  * Rendered inside the Media Library attachment edit screen.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @var WP_Post $post         Attachment post.
  * @var string  $type         Current protection type.
  * @var array   $allowed_roles Currently allowed roles.
@@ -17,18 +17,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $urma_protection_options = array(
-	URMA_Access_Control::TYPE_PUBLIC    => __( 'Public (WordPress default)', 'secure-media-vault' ),
-	URMA_Access_Control::TYPE_LOGGED_IN => __( 'Logged-in users only', 'secure-media-vault' ),
-	URMA_Access_Control::TYPE_ROLES     => __( 'Specific user roles', 'secure-media-vault' ),
-	URMA_Access_Control::TYPE_PASSWORD  => __( 'Password protected', 'secure-media-vault' ),
-	URMA_Access_Control::TYPE_POSTS     => __( 'Restrict to specific posts/pages', 'secure-media-vault' ),
+	URMA_Access_Control::TYPE_PUBLIC    => __( 'Public (WordPress default)', 'ptp-private-media' ),
+	URMA_Access_Control::TYPE_LOGGED_IN => __( 'Logged-in users only', 'ptp-private-media' ),
+	URMA_Access_Control::TYPE_ROLES     => __( 'Specific user roles', 'ptp-private-media' ),
+	URMA_Access_Control::TYPE_PASSWORD  => __( 'Password protected', 'ptp-private-media' ),
+	URMA_Access_Control::TYPE_POSTS     => __( 'Restrict to specific posts/pages', 'ptp-private-media' ),
 );
 ?>
 <div class="urma-attachment-fields" id="urma-attachment-<?php echo esc_attr( $post->ID ); ?>">
 
 	<p>
 		<label for="urma-protection-type-<?php echo esc_attr( $post->ID ); ?>">
-			<strong><?php esc_html_e( 'Access Type:', 'secure-media-vault' ); ?></strong>
+			<strong><?php esc_html_e( 'Access Type:', 'ptp-private-media' ); ?></strong>
 		</label><br>
 		<select
 			name="attachments[<?php echo esc_attr( $post->ID ); ?>][urma_protection_type]"
@@ -46,7 +46,7 @@ $urma_protection_options = array(
 
 	<!-- Roles sub-field -->
 	<div class="urma-field-roles" style="display:<?php echo URMA_Access_Control::TYPE_ROLES === $type ? 'block' : 'none'; ?>">
-		<label><strong><?php esc_html_e( 'Allowed Roles:', 'secure-media-vault' ); ?></strong></label><br>
+		<label><strong><?php esc_html_e( 'Allowed Roles:', 'ptp-private-media' ); ?></strong></label><br>
 		<?php foreach ( $all_roles as $urma_role_slug => $urma_role_name ) : ?>
 			<label style="display:inline-block;margin-right:12px;">
 				<input
@@ -63,7 +63,7 @@ $urma_protection_options = array(
 	<!-- Password sub-field -->
 	<div class="urma-field-password" style="display:<?php echo URMA_Access_Control::TYPE_PASSWORD === $type ? 'block' : 'none'; ?>">
 		<label for="urma-password-<?php echo esc_attr( $post->ID ); ?>">
-			<strong><?php esc_html_e( 'New Password (leave blank to keep current):', 'secure-media-vault' ); ?></strong>
+			<strong><?php esc_html_e( 'New Password (leave blank to keep current):', 'ptp-private-media' ); ?></strong>
 		</label><br>
 		<input
 			type="password"
@@ -77,7 +77,7 @@ $urma_protection_options = array(
 	<!-- Post IDs sub-field -->
 	<div class="urma-field-posts" style="display:<?php echo URMA_Access_Control::TYPE_POSTS === $type ? 'block' : 'none'; ?>">
 		<label for="urma-post-ids-<?php echo esc_attr( $post->ID ); ?>">
-			<strong><?php esc_html_e( 'Allowed Post/Page IDs (comma-separated):', 'secure-media-vault' ); ?></strong>
+			<strong><?php esc_html_e( 'Allowed Post/Page IDs (comma-separated):', 'ptp-private-media' ); ?></strong>
 		</label><br>
 		<?php
 		$urma_existing_post_ids = '';
@@ -100,7 +100,7 @@ $urma_protection_options = array(
 	<!-- Secure URL generator -->
 	<?php if ( URMA_Access_Control::get_instance()->is_protected( $post->ID ) ) : ?>
 	<div class="urma-secure-url-section" style="margin-top:10px;padding-top:10px;border-top:1px solid #ddd;">
-		<strong><?php esc_html_e( 'Secure URL:', 'secure-media-vault' ); ?></strong><br>
+		<strong><?php esc_html_e( 'Secure URL:', 'ptp-private-media' ); ?></strong><br>
 		<div style="display:flex;gap:6px;align-items:center;margin-top:4px;">
 			<input
 				type="text"
@@ -108,26 +108,26 @@ $urma_protection_options = array(
 				readonly
 				value=""
 				style="flex:1;font-size:11px;"
-				placeholder="<?php esc_attr_e( 'Click Generate to create a secure URL', 'secure-media-vault' ); ?>"
+				placeholder="<?php esc_attr_e( 'Click Generate to create a secure URL', 'ptp-private-media' ); ?>"
 			>
 			<button
 				type="button"
 				class="button urma-generate-url"
 				data-attachment-id="<?php echo esc_attr( $post->ID ); ?>"
 				data-target="urma-secure-url-<?php echo esc_attr( $post->ID ); ?>"
-			><?php esc_html_e( 'Generate', 'secure-media-vault' ); ?></button>
+			><?php esc_html_e( 'Generate', 'ptp-private-media' ); ?></button>
 			<button
 				type="button"
 				class="button urma-copy-url"
 				data-target="urma-secure-url-<?php echo esc_attr( $post->ID ); ?>"
-			><?php esc_html_e( 'Copy', 'secure-media-vault' ); ?></button>
+			><?php esc_html_e( 'Copy', 'ptp-private-media' ); ?></button>
 		</div>
 		<button
 			type="button"
 			class="button-link urma-revoke-tokens"
 			data-attachment-id="<?php echo esc_attr( $post->ID ); ?>"
 			style="color:#d63638;margin-top:4px;font-size:11px;"
-		><?php esc_html_e( 'Revoke all tokens for this file', 'secure-media-vault' ); ?></button>
+		><?php esc_html_e( 'Revoke all tokens for this file', 'ptp-private-media' ); ?></button>
 	</div>
 	<?php endif; ?>
 </div>

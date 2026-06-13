@@ -5,7 +5,7 @@
  * Handles activation tasks: creating database tables, default options,
  * and writing .htaccess protection rules.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 

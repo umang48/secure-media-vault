@@ -5,7 +5,7 @@
  * Handles cleanup on plugin deactivation: flush rewrite rules, remove
  * upload directory .htaccess protection rules, and clean up scheduled events.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -31,7 +31,7 @@ class URMA_Deactivator {
 	}
 
 	/**
-	 * Remove the Restricted Media Access rules from the uploads .htaccess file.
+	 * Remove the PTP Private Media rules from the uploads .htaccess file.
 	 *
 	 * @return void
 	 */
@@ -49,7 +49,7 @@ class URMA_Deactivator {
 		}
 
 		// Remove the SMV block between markers.
-		$pattern = '/# BEGIN Restricted Media Access.*?# END Restricted Media Access\n?/s';
+		$pattern = '/# BEGIN PTP Private Media.*?# END PTP Private Media\n?/s';
 		$content = preg_replace( $pattern, '', $content );
 
 		file_put_contents( $htaccess, $content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents

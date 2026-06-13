@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name:       Restricted Media Access
- * Plugin URI:        https://github.com/umang48/umang-restricted-media-access
+ * Plugin Name:       PTP Private Media
+ * Plugin URI:        https://wordpress.org/plugins/ptp-private-media/
  * Description:       Protect WordPress media files from direct public access with token-based secure delivery, fine-grained access control, and SEO indexing protection.
  * Version:           1.0.0
  * Requires at least: 6.0
@@ -10,10 +10,10 @@
  * Author URI:        https://phptutorialpoints.in/
  * License:           GPL v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       secure-media-vault
+ * Text Domain:       ptp-private-media
  * Domain Path:       /languages
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  */
 
 // Prevent direct file access.
@@ -55,19 +55,19 @@ function urma_uploads_url() {
  *
  * @since 1.0.0
  */
-final class Umang_Restricted_Media_Access {
+final class PTP_Private_Media {
 
 	/**
 	 * Single instance.
 	 *
-	 * @var Umang_Restricted_Media_Access
+	 * @var PTP_Private_Media
 	 */
 	private static $instance = null;
 
 	/**
 	 * Get single instance.
 	 *
-	 * @return Umang_Restricted_Media_Access
+	 * @return PTP_Private_Media
 	 */
 	public static function get_instance() {
 		if ( null === self::$instance ) {
@@ -133,12 +133,12 @@ final class Umang_Restricted_Media_Access {
 }
 
 /**
- * Returns the main instance of Umang_Restricted_Media_Access.
+ * Returns the main instance of PTP_Private_Media.
  *
- * @return Umang_Restricted_Media_Access
+ * @return PTP_Private_Media
  */
 function urma() {
-	return Umang_Restricted_Media_Access::get_instance();
+	return PTP_Private_Media::get_instance();
 }
 
 // Kick off the plugin.

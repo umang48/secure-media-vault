@@ -5,7 +5,7 @@
  * Adds X-Robots-Tag headers, disables attachment page indexing,
  * and modifies robots.txt for restricted media.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -76,7 +76,7 @@ class URMA_SEO_Protection {
 		$upload_dir    = wp_upload_dir();
 		$uploads_path  = wp_parse_url( $upload_dir['baseurl'], PHP_URL_PATH );
 
-		echo "\n# Restricted Media Access\n";
+		echo "\n# PTP Private Media\n";
 		echo 'User-agent: *' . "\n";
 		echo 'Disallow: ' . esc_url( $uploads_path ) . '/' . "\n";
 		echo 'Disallow: /restricted-media/' . "\n";

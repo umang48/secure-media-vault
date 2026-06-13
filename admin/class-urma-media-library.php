@@ -5,7 +5,7 @@
  * Adds protection settings to the Media Library attachment edit screen,
  * handles bulk protect actions, and shows protection status in the grid view.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -85,7 +85,7 @@ class URMA_Media_Library {
 		$html = ob_get_clean();
 
 		$form_fields['urma_protection'] = array(
-			'label' => __( 'Protection Settings', 'secure-media-vault' ),
+			'label' => __( 'Protection Settings', 'ptp-private-media' ),
 			'input' => 'html',
 			'html'  => $html,
 		);
@@ -133,9 +133,9 @@ class URMA_Media_Library {
 	 * @return array
 	 */
 	public function register_bulk_actions( $actions ) {
-		$actions['urma_bulk_protect']           = __( 'SMV: Protect (Logged-in Only)', 'secure-media-vault' );
-		$actions['urma_bulk_protect_admin']     = __( 'SMV: Protect (Admins Only)', 'secure-media-vault' );
-		$actions['urma_bulk_make_public']       = __( 'SMV: Make Public', 'secure-media-vault' );
+		$actions['urma_bulk_protect']           = __( 'SMV: Protect (Logged-in Only)', 'ptp-private-media' );
+		$actions['urma_bulk_protect_admin']     = __( 'SMV: Protect (Admins Only)', 'ptp-private-media' );
+		$actions['urma_bulk_make_public']       = __( 'SMV: Make Public', 'ptp-private-media' );
 		return $actions;
 	}
 
@@ -205,7 +205,7 @@ class URMA_Media_Library {
 		printf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
 			/* translators: %d: number of files updated */
-			esc_html( sprintf( __( 'Restricted Media Access: %d file(s) protection settings updated.', 'secure-media-vault' ), $count ) )
+			esc_html( sprintf( __( 'PTP Private Media: %d file(s) protection settings updated.', 'ptp-private-media' ), $count ) )
 		);
 	}
 
@@ -216,7 +216,7 @@ class URMA_Media_Library {
 	 * @return array
 	 */
 	public function add_media_columns( $columns ) {
-		$columns['urma_protection'] = __( 'Protection', 'secure-media-vault' );
+		$columns['urma_protection'] = __( 'Protection', 'ptp-private-media' );
 		return $columns;
 	}
 
@@ -238,27 +238,27 @@ class URMA_Media_Library {
 
 		$labels = array(
 			URMA_Access_Control::TYPE_PUBLIC    => array(
-				'label' => __( 'Public', 'secure-media-vault' ),
+				'label' => __( 'Public', 'ptp-private-media' ),
 				'class' => 'urma-status urma-status--public',
 				'icon'  => 'dashicons-unlock',
 			),
 			URMA_Access_Control::TYPE_LOGGED_IN => array(
-				'label' => __( 'Logged-in', 'secure-media-vault' ),
+				'label' => __( 'Logged-in', 'ptp-private-media' ),
 				'class' => 'urma-status urma-status--protected',
 				'icon'  => 'dashicons-lock',
 			),
 			URMA_Access_Control::TYPE_ROLES     => array(
-				'label' => __( 'By Role', 'secure-media-vault' ),
+				'label' => __( 'By Role', 'ptp-private-media' ),
 				'class' => 'urma-status urma-status--protected',
 				'icon'  => 'dashicons-groups',
 			),
 			URMA_Access_Control::TYPE_PASSWORD  => array(
-				'label' => __( 'Password', 'secure-media-vault' ),
+				'label' => __( 'Password', 'ptp-private-media' ),
 				'class' => 'urma-status urma-status--password',
 				'icon'  => 'dashicons-key',
 			),
 			URMA_Access_Control::TYPE_POSTS     => array(
-				'label' => __( 'By Post', 'secure-media-vault' ),
+				'label' => __( 'By Post', 'ptp-private-media' ),
 				'class' => 'urma-status urma-status--protected',
 				'icon'  => 'dashicons-admin-page',
 			),

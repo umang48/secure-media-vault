@@ -2,10 +2,10 @@
 /**
  * .htaccess Manager.
  *
- * Utility class to write, update, and remove Restricted Media Access protection
+ * Utility class to write, update, and remove PTP Private Media protection
  * rules from the uploads directory .htaccess file.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -24,14 +24,14 @@ class URMA_Htaccess_Manager {
 	 *
 	 * @var string
 	 */
-	const MARKER_BEGIN = '# BEGIN Restricted Media Access';
+	const MARKER_BEGIN = '# BEGIN PTP Private Media';
 
 	/**
 	 * Marker for the SMV block end.
 	 *
 	 * @var string
 	 */
-	const MARKER_END = '# END Restricted Media Access';
+	const MARKER_END = '# END PTP Private Media';
 
 	/**
 	 * Write or update the SMV rules in the uploads .htaccess.
@@ -119,7 +119,7 @@ class URMA_Htaccess_Manager {
 		$upload_dir  = wp_upload_dir();
 		$upload_path = rtrim( wp_parse_url( $upload_dir['baseurl'], PHP_URL_PATH ), '/' );
 
-		return "# Restricted Media Access – Nginx Rules\n"
+		return "# PTP Private Media – Nginx Rules\n"
 			. "# Add these rules inside your server {} block:\n\n"
 			. "location ~* ^{$upload_path}/(.+)$ {\n"
 			. "    deny all;\n"

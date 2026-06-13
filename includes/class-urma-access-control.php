@@ -5,7 +5,7 @@
  * Manages per-attachment protection settings, evaluates whether a given
  * request is authorized, and handles password-protected file access.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -51,6 +51,52 @@ class URMA_Access_Control {
 	 * Constructor.
 	 */
 	private function __construct() {}
+
+	/**
+	 * Get a unique session identifier for the current visitor.
+	 *
+	 * For logged-in users, returns the user ID.
+	 * For anonymous users, generates and stores a unique session hash in a cookie.
+	 *
+	 * @return string Unique session identifier.
+	 */
+	private function get_session_identifier() {
+		// Logged-in users: use their user ID.
+		$user_id = get_current_user_id();
+		if ( $user_id > 0 ) {
+			return (string) $user_id;
+		}
+
+		// Anonymous users: use a secure session cookie.
+		$cookie_name = 'urma_session';
+
+		// Check if session cookie already exists.
+		if ( isset( $_COOKIE[ $cookie_name ] ) && ! empty( $_COOKIE[ $cookie_name ] ) ) {
+			// Validate the format (32 alphanumeric characters).
+			$session_id = sanitize_text_field( wp_unslash( $_COOKIE[ $cookie_name ] ) );
+			if ( preg_match( '/^[a-f0-9]{32}$/i', $session_id ) ) {
+				return $session_id;
+			}
+		}
+
+		// Generate a new secure session identifier.
+		$session_id = md5( wp_generate_password( 32, true, true ) . time() . wp_rand() );
+
+		// Set cookie for 30 minutes (matches transient expiry).
+		if ( ! headers_sent() ) {
+			setcookie(
+				$cookie_name,
+				$session_id,
+				time() + ( 30 * MINUTE_IN_SECONDS ),
+				COOKIEPATH,
+				COOKIE_DOMAIN,
+				is_ssl(),
+				true // HttpOnly flag for security.
+			);
+		}
+
+		return $session_id;
+	}
 
 	/**
 	 * Save protection settings for an attachment.
@@ -231,14 +277,16 @@ class URMA_Access_Control {
 
 		if ( empty( $password ) ) {
 			// Allow already-authenticated sessions via transient.
-			$transient_key = 'urma_pw_' . get_current_user_id() . '_' . $protection['attachment_id'];
+			$session_id    = $this->get_session_identifier();
+			$transient_key = 'urma_pw_' . $session_id . '_' . $protection['attachment_id'];
 			return (bool) get_transient( $transient_key );
 		}
 
 		$valid = wp_check_password( $password, $protection['password_hash'] );
 		if ( $valid ) {
 			// Remember for 30 minutes.
-			$transient_key = 'urma_pw_' . get_current_user_id() . '_' . $protection['attachment_id'];
+			$session_id    = $this->get_session_identifier();
+			$transient_key = 'urma_pw_' . $session_id . '_' . $protection['attachment_id'];
 			set_transient( $transient_key, true, 30 * MINUTE_IN_SECONDS );
 		}
 

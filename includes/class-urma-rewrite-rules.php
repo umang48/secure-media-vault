@@ -6,7 +6,7 @@
  * restricted-media endpoint. Also disables media attachment pages
  * when configured.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -155,7 +155,7 @@ class URMA_Rewrite_Rules {
 			}
 
 			// File not found on disk.
-			wp_die( esc_html__( 'File not found.', 'secure-media-vault' ), '', array( 'response' => 404 ) );
+			wp_die( esc_html__( 'File not found.', 'ptp-private-media' ), '', array( 'response' => 404 ) );
 		}
 
 		// Protected file — inform the client.
@@ -164,7 +164,7 @@ class URMA_Rewrite_Rules {
 				'smv'       => true,
 				'protected' => true,
 				'file'      => $file_uri,
-				'message'   => __( 'Direct access is blocked. Use the secure URL to access this file.', 'secure-media-vault' ),
+				'message'   => __( 'Direct access is blocked. Use the secure URL to access this file.', 'ptp-private-media' ),
 			),
 			403
 		);

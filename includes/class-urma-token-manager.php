@@ -5,7 +5,7 @@
  * Generates, validates, and purges HMAC-signed, time-limited tokens
  * used to serve restricted media files securely.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @since   1.0.0
  */
 
@@ -227,7 +227,9 @@ class URMA_Token_Manager {
 				current_time( 'mysql', true )
 			)
 		);
-		wp_cache_flush_group( 'smv' );
+		
+		// Flush the entire cache since wp_cache_flush_group() requires WP 6.1+.
+		wp_cache_flush();
 	}
 
 	/**

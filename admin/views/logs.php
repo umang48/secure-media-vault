@@ -2,7 +2,7 @@
 /**
  * Admin view: Access Logs.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  * @var array  $urma_logs      Array of log rows.
  * @var int    $total     Total number of log rows.
  * @var int    $per_page  Rows per page.
@@ -19,20 +19,20 @@ $urma_total_pages = (int) ceil( $total / $per_page );
 <div class="wrap urma-wrap">
 	<h1 class="urma-page-title">
 		<span class="dashicons dashicons-list-view"></span>
-		<?php esc_html_e( 'Umang Restricted Media Access – Access Logs', 'secure-media-vault' ); ?>
+		<?php esc_html_e( 'PTP Private Media – Access Logs', 'ptp-private-media' ); ?>
 	</h1>
 
 	<?php if ( empty( $urma_logs ) ) : ?>
-		<p><?php esc_html_e( 'No access log entries found.', 'secure-media-vault' ); ?></p>
+		<p><?php esc_html_e( 'No access log entries found.', 'ptp-private-media' ); ?></p>
 	<?php else : ?>
 	<table class="wp-list-table widefat fixed striped urma-logs-table">
 		<thead>
 			<tr>
-				<th><?php esc_html_e( 'Time', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'File', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'User', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'IP Address', 'secure-media-vault' ); ?></th>
-				<th><?php esc_html_e( 'Status', 'secure-media-vault' ); ?></th>
+				<th><?php esc_html_e( 'Time', 'ptp-private-media' ); ?></th>
+				<th><?php esc_html_e( 'File', 'ptp-private-media' ); ?></th>
+				<th><?php esc_html_e( 'User', 'ptp-private-media' ); ?></th>
+				<th><?php esc_html_e( 'IP Address', 'ptp-private-media' ); ?></th>
+				<th><?php esc_html_e( 'Status', 'ptp-private-media' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -54,7 +54,7 @@ $urma_total_pages = (int) ceil( $total / $per_page );
 						$urma_user = get_userdata( $urma_log->user_id );
 						echo $urma_user ? esc_html( $urma_user->user_login ) : esc_html( sprintf( '#%d', $urma_log->user_id ) );
 					} else {
-						esc_html_e( 'Guest', 'secure-media-vault' );
+						esc_html_e( 'Guest', 'ptp-private-media' );
 					}
 					?>
 				</td>

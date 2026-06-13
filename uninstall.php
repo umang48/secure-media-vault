@@ -1,11 +1,11 @@
 <?php
 /**
- * Uninstall – Restricted Media Access.
+ * Uninstall – PTP Private Media.
  *
  * Fired when the user clicks "Delete" from the Plugins screen.
  * Removes all plugin data: options, database tables, and .htaccess rules.
  *
- * @package UmangRestrictedMediaAccess
+ * @package PTPPrivateMedia
  */
 
 // Only run when WordPress calls this file during uninstall.
@@ -55,7 +55,7 @@ $urma_htaccess   = $urma_upload_dir['basedir'] . '/.htaccess';
 if ( file_exists( $urma_htaccess ) ) {
 	$urma_content = file_get_contents( $urma_htaccess ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 	if ( false !== $urma_content ) {
-		$urma_pattern = '/# BEGIN Restricted Media Access.*?# END Restricted Media Access\n?/s';
+		$urma_pattern = '/# BEGIN PTP Private Media.*?# END PTP Private Media\n?/s';
 		$urma_content = preg_replace( $urma_pattern, '', $urma_content );
 		file_put_contents( $urma_htaccess, $urma_content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
 	}
